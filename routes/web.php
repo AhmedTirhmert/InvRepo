@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome')->with('variable', 15);
 });
+
+Route::get('/contact',function(){
+	echo"je suis rahma maissou";
+});
+
+Route::get('/contact/{name}',function($name){
+	echo" je suis " . $name;
+});
