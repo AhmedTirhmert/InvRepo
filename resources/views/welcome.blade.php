@@ -80,7 +80,7 @@
             <div class="content">
                 <div class="title m-b-md">
                     @if($variable == 5)
-                    Laravel
+                    Ahmed 
                     @else
                     Homestead
                     @endif

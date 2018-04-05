@@ -12,5 +12,5 @@
 */
 
 Route::get('/', function () {
-    return view('welcome')->with('variable', 6);
+    return view('welcome')->with('variable', 15);
 });
