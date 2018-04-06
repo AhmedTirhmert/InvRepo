@@ -15,8 +15,9 @@ Route::get('/', function () {
     return view('welcome')->with('variable', 15);
 });
 
-Route::get('/contact',function(){
-	echo"je suis rahma maissou";
+Route::get('/connect',function(){
+	
+	return view('welcome')->with('hello', "je suis rahma maissou");
 });
 
 Route::get('/contact/{name}',function($name){

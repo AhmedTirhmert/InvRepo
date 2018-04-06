@@ -79,10 +79,11 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    @if($variable == 5)
-                    Ahmed 
+                    @if($variable == 15)
+                    khalid 
                     @else
-                    Homestead
+                    Ahmed
+                    {{$hello}}
                     @endif
                     
                 </div>
