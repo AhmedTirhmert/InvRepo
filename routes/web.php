@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome')->with('variable', "welcome");
+    return view('welcome')->with('variable', "welcome FROM welcome");
 });
 
 Route::get('/contact',function(){
@@ -26,4 +26,9 @@ Route::get('/contact/{name}',function($name){
 Route::get('/contact/{name}/age/{age}',function($name,$age){
 	echo" je suis " . $name . " de l'age " . $age . "ans";
 });
+
+Route::get('/foo', function () {
+    return 'Hello World';
+});
+
 
