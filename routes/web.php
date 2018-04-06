@@ -10,16 +10,32 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome')->with('variable', "hello from welcome");
-});
-
-Route::get('/connect',function(){
+Route::get('/mypage', function(){
 	
-	return view('welcome')->with('variable', "hello from connect");
+	return view('test')->with('variable', "hello from test");
 });
+
+
+Route::get('/',function () {
+    return view('welcome')->with('hello', "hello from welcome");
+});
+
+
 
 Route::get('/contact/{name}',function($name){
 	echo" je suis " . $name;
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>
