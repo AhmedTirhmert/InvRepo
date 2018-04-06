@@ -12,12 +12,12 @@
 */
 
 Route::get('/', function () {
-    return view('welcome')->with('variable', 15);
+    return view('welcome')->with('variable', "hello from welcome");
 });
 
 Route::get('/connect',function(){
 	
-	return view('welcome');
+	return view('welcome')->with('variable', "hello from connect");
 });
 
 Route::get('/contact/{name}',function($name){

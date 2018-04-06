@@ -79,12 +79,9 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    @if($variable == 15)
-                    khalid 
-                    @else
-                    Ahmed
-                    {{$hello}}
-                    @endif
+                    
+                    {{$variable}}
+                   
                     
                 </div>
 
