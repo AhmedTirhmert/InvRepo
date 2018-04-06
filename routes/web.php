@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::get('/connect',function(){
 	
-	return view('welcome')->with('hello', "je suis rahma maissou");
+	return view('welcome');
 });
 
 Route::get('/contact/{name}',function($name){
