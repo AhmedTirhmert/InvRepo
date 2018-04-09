@@ -80,12 +80,8 @@
             <div class="content">
                 <div class="title m-b-md">
                     
-<<<<<<< HEAD
                     {{$hello}}
-=======
-                    {{$variable}}
                     
->>>>>>> ed870c64529cf07330746d0f2cf40149dcbd3d1d
                    
                     
                 </div>
