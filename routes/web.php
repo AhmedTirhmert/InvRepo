@@ -11,24 +11,28 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome')->with('variable', "welcome FROM welcome");
 });
 
-Route::get('/contact',function(){
-    return view('welcome')->with('variable', "welcome from contact");
-});
+Route::get('/contact/{name}','TestController@contact');
 
-Route::get('/contact/{name}',function($name){
+/*Route::get('/contact/{name}',function($name){
 	echo" je suis " . $name;
 });
 
 Route::get('/contact/{name}/age/{age}',function($name,$age){
-	echo" je suis " . $name . " de l'age " . $age . "ans";
-});
+    echo" je suis " . $name . " de l'age " . $age . "ans";
+})  ->where(['name' => '[a-zA-Z]+', 'age'=>'[0-9]+']);
+*/
 
-Route::get('/foo', function () {
-    return 'Hello World';
-});
+
+
+
+
+
+
+
 
 
