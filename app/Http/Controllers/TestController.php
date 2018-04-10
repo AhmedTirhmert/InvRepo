@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    public function contact($name){
-        echo"je suis dans la methode contact et je suis $name";
+    public function contact(){
+        echo"Hello From contact function inside controller ";
     }
 
 }
