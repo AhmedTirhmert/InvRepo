@@ -13,9 +13,11 @@ class CreateCatégorieTable extends Migration
      */
     public function up()
     {
-        Schema::create('catégorie', function (Blueprint $table) {
-            $table->integer('code_categorie')->primary();
-            $table->string('libellé',20);
+
+        Schema::create('categorie', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->unsignedInteger('code_categorie')->primary();
+            $table->string('libelle',20);
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateCatégorieTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('catégorie');
+        Schema::dropIfExists('categorie');
     }
 }

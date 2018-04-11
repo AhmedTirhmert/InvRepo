@@ -10,12 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-<<<<<<< HEAD
-	
-=======
 
-
->>>>>>> 948703a94ab10a8ba9b29a8f836964027682592a
 
 Route::get('/', function () {
     return view('welcome')->with('variable', "welcome FROM welcome");
@@ -31,9 +26,8 @@ Route::get('/contact/{name}',function($name){
 Route::get('/contact/{name}/age/{age}',function($name,$age){
     echo" je suis " . $name . " de l'age " . $age . "ans";
 })  ->where(['name' => '[a-zA-Z]+', 'age'=>'[0-9]+']);
-<<<<<<< HEAD
-=======
-*/
+
+
 
 Route::get('/mypage', function(){
 	
@@ -57,7 +51,7 @@ Route::get('/contact/{name}',function($name){
 
 
 
->>>>>>> 948703a94ab10a8ba9b29a8f836964027682592a
+
 
 
 

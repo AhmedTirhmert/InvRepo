@@ -14,9 +14,9 @@ class CreateProduitTable extends Migration
     public function up()
     {
         Schema::create('produit', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->string('Ref',8)->primary();
-            $table->integer('code_categorie_for');
-            $table->foreign('code_categorie_for')->references('code_categorie')->on('catégorie');
+            $table->unsignedInteger('fk_produit_categorie');
             $table->string('designation',20);
             $table->double('prix_unitaire');
             $table->timestamps();

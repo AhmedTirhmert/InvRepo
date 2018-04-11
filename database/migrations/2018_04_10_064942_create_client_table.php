@@ -14,7 +14,8 @@ class CreateClientTable extends Migration
     public function up()
     {
         Schema::create('client', function (Blueprint $table) {
-            $table->integer('code_c')->primary();
+            $table->engine = 'InnoDB';
+            $table->unsignedInteger('code_c')->primary();
             $table->string('nom',10);
             $table->string('prenom',10);
             $table->string('email',20)->unique();

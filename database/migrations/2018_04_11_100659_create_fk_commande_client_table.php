@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTest1Table extends Migration
+class CreateFkCommandeClientTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateTest1Table extends Migration
      */
     public function up()
     {
-        Schema::create('test1', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('nom');
-            $table->timestamps();
+        Schema::table('commande', function (Blueprint $table) {
+            $table->foreign('fk_commande_client')->references('code_c')->on('client');
+            
         });
     }
 
@@ -27,6 +26,6 @@ class CreateTest1Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test1');
+        Schema::dropforeign('fk_commande_client');
     }
 }

@@ -14,11 +14,12 @@ class CreateFournirTable extends Migration
     public function up()
     {
         Schema::create('fournir', function (Blueprint $table) {
-            $table->string('ref_prd_for',8);
-            $table->integer('code_f_for');
-            $table->foreign('code_f_for')->references('code_f')->on('fournisseur');
-            $table->foreign('ref_prd_for')->references('ref')->on('produit');
-            $table->primary(['ref_prd_for', 'code_f_for']);
+           $table->engine = 'InnoDB';
+            $table->string('fk_fournir_produit',8);
+            $table->unsignedInteger('fk_fournir_fournisseur');
+            
+            
+            $table->primary(['fk_fournir_produit', 'fk_fournir_fournisseur']);
             $table->timestamps();
         });
     }
