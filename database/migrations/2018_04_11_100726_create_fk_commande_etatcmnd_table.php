@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEtatCommandeTable extends Migration
+class CreateFkCommandeEtatcmndTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateEtatCommandeTable extends Migration
      */
     public function up()
     {
-        Schema::create('etat_commande', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->unsignedInteger('id_etat')->primary();
-            $table->string('etat',10);
-            $table->timestamps();
+        Schema::table('commande', function (Blueprint $table) {
+           $table->foreign('fk_commande_etatcmnd')->references('id_etat')->on('etat_commande');
         });
     }
 
@@ -28,6 +25,6 @@ class CreateEtatCommandeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('etat_commande');
+        Schema::dropforeign('fk_commande_etatcmnd');
     }
 }

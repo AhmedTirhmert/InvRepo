@@ -14,12 +14,12 @@ class CreateCommandeTable extends Migration
     public function up()
     {
         Schema::create('commande', function (Blueprint $table) {
-            $table->integer('numero_com')->primary();
-            $table->integer('code_c_for');
-            $table->integer('id_etat_for');
-            $table->foreign('code_c_for')->references('code_c')->on('client');
-            $table->foreign('id_etat_for')->references('id_etet')->on('etat_commande');
-
+            $table->engine = 'InnoDB';
+            $table->unsignedInteger('numero_com')->primary();
+            $table->unsignedInteger('fk_commande_client');
+            $table->unsignedInteger('fk_commande_etatcmnd');
+            
+            
             $table->timestamps();
         });
     }

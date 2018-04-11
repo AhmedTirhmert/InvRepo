@@ -13,14 +13,18 @@ class CreateConcerneTable extends Migration
      */
     public function up()
     {
+      
         Schema::create('concerne', function (Blueprint $table) {
-            $table->string('ref_p_for',8);
-            $table->integer('numero_com_for');
-            $table->foreign('ref_p_for')->references('ref')->on('produit');
-            $table->foreign('numero_com_for')->references('numero_com')->on('commande');
-            $table->primary(['numero_com_for', 'ref_p_for']);
+
+            $table->engine = 'InnoDB';
+            $table->string('fk_concerne_produit',8);
+            $table->unsignedInteger('fk_concerne_cmnd');
+            $table->primary(['fk_concerne_cmnd', 'fk_concerne_produit']);
             $table->timestamps();
+            
+            
         });
+      
     }
 
     /**

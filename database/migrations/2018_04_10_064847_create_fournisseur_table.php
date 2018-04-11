@@ -14,8 +14,8 @@ class CreateFournisseurTable extends Migration
     public function up()
     {
         Schema::create('fournisseur', function (Blueprint $table) {
-
-            $table->integer('code_f')->primary();
+            $table->engine = 'InnoDB';    
+            $table->unsignedInteger('code_f')->primary();
             $table->string('nom',10);
             $table->string('prenom',10);
             $table->string('Adresse',14);
