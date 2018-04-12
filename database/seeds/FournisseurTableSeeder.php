@@ -11,6 +11,6 @@ class FournisseurTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Fournisseur::class, 50)->create();
+        //factory(App\Fournisseur::class, 50)->create();
     }
 }
