@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFkConcerneCmndTable extends Migration
+class CreateCategorieTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateFkConcerneCmndTable extends Migration
      */
     public function up()
     {
-        Schema::table('concerne', function (Blueprint $table) {
-            $table->foreign('numero_cmnd')->references('numero_cmnd')->on('commande');
+
+        Schema::create('categorie', function (Blueprint $table) {
+            $table->increments('code_categorie');
+            $table->string('libelle');
         });
     }
 
@@ -25,6 +27,6 @@ class CreateFkConcerneCmndTable extends Migration
      */
     public function down()
     {
-        Schema::dropconstraint('fk_concerne_cmnd');
+        Schema::dropIfExists('categorie');
     }
 }

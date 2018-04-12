@@ -18,13 +18,14 @@ class ProduitTableSeeder extends Seeder
     			DB::table('produit')->insert(
     				[
     				
-    				'ref'=>$faker->ean8,
-    				'fk_produit_categorie'=>$faker->numberBetween(1,4),
+    				'reference'=>$faker->ean8,
+    				'code_categorie'=>$faker->numberBetween(1,4),
+                    'code_utilisateur'=>$faker->numberBetween(1,50),
     				'designation'=>$faker->text($maxNbChars = 20),
     				'prix_unitaire'=>$faker->randomFloat(),
-    				'created_at'=>$faker->dateTime,
-    				'updated_at'=>$faker->dateTime,
+    				
     				]
     			);
-    		}    }
+    		}   
+            }
 }

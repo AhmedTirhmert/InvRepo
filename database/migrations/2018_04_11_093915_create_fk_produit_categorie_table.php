@@ -14,7 +14,7 @@ class CreateFkProduitCategorieTable extends Migration
     public function up()
     {
         Schema::table('produit', function (Blueprint $table) {
-        $table->foreign('fk_produit_categorie')->references('code_categorie')->on('categorie');
+        $table->foreign('code_categorie')->references('code_categorie')->on('categorie');
         });
     }
 
@@ -25,6 +25,6 @@ class CreateFkProduitCategorieTable extends Migration
      */
     public function down()
     {
-        Schema::dropForeign('fk_produit_categorie');
+        Schema::dropconstraint('fk_produit_categorie');
     }
 }

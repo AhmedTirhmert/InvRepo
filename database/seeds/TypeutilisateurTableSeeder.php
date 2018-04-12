@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CategorieTableSeeder extends Seeder
+class TypeutilisateurTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,28 +11,22 @@ class CategorieTableSeeder extends Seeder
      */
     public function run()
     {
-
-    	$cat = ['Consommable','Materiel Informatique','Equipment Bureau','Papier'];
+           	$type_utilisateur = ['Client','Fournisseur'];
 
         $faker = Faker\Factory::create();
-    		$limit = 4;
+    		$limit = 2;
 
     		for ($i=0; $i < $limit; $i++) { 
-    			DB::table('categorie')->insert(
+    			DB::table('type_utilisateur')->insert(
     				[
     				
     				
-    				'libelle'=>$cat[$faker->unique()->numberBetween(0,3)],
+    				'role'=>$type_utilisateur[$faker->unique()->numberBetween(0,1)],
     				
     				]
     			);
     		}   
 
 
-
-             }
-
-
-
-             
+    }
 }

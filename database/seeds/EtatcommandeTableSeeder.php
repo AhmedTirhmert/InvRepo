@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CategorieTableSeeder extends Seeder
+class EtatcommandeTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,28 +11,22 @@ class CategorieTableSeeder extends Seeder
      */
     public function run()
     {
-
-    	$cat = ['Consommable','Materiel Informatique','Equipment Bureau','Papier'];
+        
+    
+         	$etat = ['confirmé','refusé'];
 
         $faker = Faker\Factory::create();
-    		$limit = 4;
+    		$limit = 2;
 
     		for ($i=0; $i < $limit; $i++) { 
-    			DB::table('categorie')->insert(
+    			DB::table('etat_commande')->insert(
     				[
     				
     				
-    				'libelle'=>$cat[$faker->unique()->numberBetween(0,3)],
+    				'etat'=>$etat[$faker->unique()->numberBetween(0,1)],
     				
     				]
     			);
     		}   
-
-
-
-             }
-
-
-
-             
+    }
 }

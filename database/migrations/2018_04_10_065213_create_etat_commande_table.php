@@ -14,10 +14,8 @@ class CreateEtatCommandeTable extends Migration
     public function up()
     {
         Schema::create('etat_commande', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->unsignedInteger('id_etat')->primary();
-            $table->string('etat',10);
-            $table->timestamps();
+            $table->increments('id_etat');
+            $table->string('etat');
         });
     }
 

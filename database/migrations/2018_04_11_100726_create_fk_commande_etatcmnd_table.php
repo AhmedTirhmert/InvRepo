@@ -14,7 +14,7 @@ class CreateFkCommandeEtatcmndTable extends Migration
     public function up()
     {
         Schema::table('commande', function (Blueprint $table) {
-           $table->foreign('fk_commande_etatcmnd')->references('id_etat')->on('etat_commande');
+           $table->foreign('id_etat')->references('id_etat')->on('etat_commande');
         });
     }
 
@@ -25,6 +25,6 @@ class CreateFkCommandeEtatcmndTable extends Migration
      */
     public function down()
     {
-        Schema::dropforeign('fk_commande_etatcmnd');
+        Schema::dropconstraint('fk_commande_etatcmnd');
     }
 }

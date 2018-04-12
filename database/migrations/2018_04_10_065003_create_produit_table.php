@@ -14,12 +14,12 @@ class CreateProduitTable extends Migration
     public function up()
     {
         Schema::create('produit', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->string('Ref',8)->primary();
-            $table->unsignedInteger('fk_produit_categorie');
-            $table->string('designation',20);
+            $table->increments('code_produit');
+            $table->string('Reference',8)->unique;
+            $table->unsignedInteger('code_utilisateur');
+            $table->unsignedInteger('code_categorie');
+            $table->string('designation');
             $table->double('prix_unitaire');
-            $table->timestamps();
         });
     }
 

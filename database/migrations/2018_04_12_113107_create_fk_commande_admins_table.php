@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFkFournirProduitTable extends Migration
+class CreateFkCommandeAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,18 @@ class CreateFkFournirProduitTable extends Migration
      */
     public function up()
     {
-        Schema::table('fournir', function (Blueprint $table) {
-            $table->foreign('fk_fournir_produit')->references('ref')->on('produit');
+        Schema::table('commande', function (Blueprint $table) {
+            $table->foreign('id_admin')->references('id_admin')->on('admins');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
+     *dropconstraint
      * @return void
      */
     public function down()
     {
-        Schema::dropforeign('fk_fournir_produit');
+        Schema::dropconstraint('fk_commande_admins');
     }
 }

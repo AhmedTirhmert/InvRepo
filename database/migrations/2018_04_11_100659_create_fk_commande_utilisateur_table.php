@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCatégorieTable extends Migration
+class CreateFkCommandeUtilisateurTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateCatégorieTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('categorie', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('code_categorie');
-            $table->string('libelle');
-            $table->timestamps();
+        Schema::table('commande', function (Blueprint $table) {
+            $table->foreign('code_utilisateur')->references('code_utilisateur')->on('utilisateur');
+            
         });
     }
 
@@ -29,6 +26,6 @@ class CreateCatégorieTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categorie');
+        Schema::dropconstraint('fk_commande_client');
     }
 }

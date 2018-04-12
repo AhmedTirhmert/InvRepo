@@ -16,11 +16,10 @@ class CreateConcerneTable extends Migration
       
         Schema::create('concerne', function (Blueprint $table) {
 
-            $table->engine = 'InnoDB';
-            $table->string('fk_concerne_produit',8);
-            $table->unsignedInteger('fk_concerne_cmnd');
-            $table->primary(['fk_concerne_cmnd', 'fk_concerne_produit']);
-            $table->timestamps();
+            $table->unsignedInteger('code_produit');
+            $table->unsignedInteger('numero_cmnd');
+            $table->unsignedInteger('qte_cmnd');
+            $table->primary(['code_produit', 'numero_cmnd']);
             
             
         });

@@ -14,13 +14,11 @@ class CreateCommandeTable extends Migration
     public function up()
     {
         Schema::create('commande', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->unsignedInteger('numero_com')->primary();
-            $table->unsignedInteger('fk_commande_client');
-            $table->unsignedInteger('fk_commande_etatcmnd');
-            
-            
-            $table->timestamps();
+            $table->increments('numero_cmnd');
+            $table->unsignedInteger('code_utilisateur');
+            $table->unsignedInteger('id_etat');
+            $table->unsignedInteger('id_admin');
+            $table->date('date_effectue');
         });
     }
 
