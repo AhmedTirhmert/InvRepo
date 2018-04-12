@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFkConcerneCmndTable extends Migration
+class CreateFkUtilisateurTypeutlTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateFkConcerneCmndTable extends Migration
      */
     public function up()
     {
-        Schema::table('concerne', function (Blueprint $table) {
-            $table->foreign('numero_cmnd')->references('numero_cmnd')->on('commande');
+        Schema::table('utilisateur', function (Blueprint $table) {
+            $table->foreign('id_type')->references('id_type')->on('type_utilisateur');
         });
     }
 
@@ -25,6 +25,6 @@ class CreateFkConcerneCmndTable extends Migration
      */
     public function down()
     {
-        Schema::dropconstraint('fk_concerne_cmnd');
+        Schema::dropconstraint('fk_utilisateur_typeutl');
     }
 }

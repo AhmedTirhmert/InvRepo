@@ -14,7 +14,7 @@ class CreateFkConcerneProduitTable extends Migration
     public function up()
     {
         Schema::table('concerne', function (Blueprint $table) {
-           $table->foreign('fk_concerne_produit')->references('Ref')->on('produit');
+           $table->foreign('code_produit')->references('code_produit')->on('produit');
         });
     }
 
@@ -25,6 +25,6 @@ class CreateFkConcerneProduitTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fk_concerne_produit');
+        Schema::dropconstraint('fk_concerne_produit');
     }
 }
