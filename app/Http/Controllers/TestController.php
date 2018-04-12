@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 class TestController extends Controller
 {
     public function contact(){
-        echo"Hello From contact function inside controller ";
+        //echo"Hello From contact function inside controller ";
+        $users = factory(Model::class)->make();
+        echo $users;
     }
 
 }

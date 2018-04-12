@@ -16,8 +16,8 @@ class CreateCatégorieTable extends Migration
 
         Schema::create('categorie', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->unsignedInteger('code_categorie')->primary();
-            $table->string('libelle',20);
+            $table->increments('code_categorie');
+            $table->string('libelle');
             $table->timestamps();
         });
     }
