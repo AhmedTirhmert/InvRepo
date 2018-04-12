@@ -11,15 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call(UsersTableSeeder::class);
-         //$this->call(FournisseurTableSeeder::class);
 
-        //DB::table('users')->insert([
-          //  'name' => str_random(10),
-            //'email' => str_random(10).'@gmail.com',
-            //'password' => bcrypt('secret'),
-       // ]);
-    // factory(App\user::class, 50)->create();
-    factory(App\Fournisseur::class, 50)->create();
+
+
+        $this->call(ClientTableSeeder::class);
+        $this->call(CategorieTableSeeder::class);
+        $this->call(ProduitTableSeeder::class);
+   
     }
 }
+

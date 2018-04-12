@@ -13,37 +13,15 @@
 
 
 Route::get('/', function () {
-    return view('welcome')->with('variable', "welcome FROM welcome");
-});
-
-Route::get('/contact','TestController@contact');
-
-
-Route::get('/contact/{name}',function($name){
-	echo" je suis " . $name;
-});
-
-Route::get('/contact/{name}/age/{age}',function($name,$age){
-    echo" je suis " . $name . " de l'age " . $age . "ans";
-})  ->where(['name' => '[a-zA-Z]+', 'age'=>'[0-9]+']);
-
-
-
-Route::get('/mypage', function(){
-	
-	return view('test')->with('variable', "hello from test");
+    return view('welcome')->with('variable', "Hello FROM HOME");
 });
 
 
-Route::get('/',function () {
-    return view('welcome')->with('hello', "hello from welcome");
-});
+Route::get('/mypage', 'TestController@contact');
 
 
 
-Route::get('/contact/{name}',function($name){
-	echo" je suis " . $name;
-});
+
 
 
 
