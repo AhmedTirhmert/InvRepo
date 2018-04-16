@@ -14,7 +14,7 @@
 
 Route::get('/', function () {
     //return view('welcome')->with('variable', "Hello FROM HOME");
-	 $admins = DB::table('admins')->first();
+	 $admins = DB::table('admins')->get();
 	 dd($admins);
 });
 
@@ -34,6 +34,10 @@ Route::get('/selectalltypesamounts', 'TestController@selectalltypesamounts');
 Route::get('/selectallproductswithcategorie', 'TestController@selectallproductswithcategorie');
 
 Route::get('/select_admins_using_model', 'admin@select_admins_using_model');
+
+Route::get('admins/create', 'admin@create');
+
+Route::post('admins/inserted', 'admin@store');
 
 
 
