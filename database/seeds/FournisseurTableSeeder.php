@@ -11,6 +11,19 @@ class FournisseurTableSeeder extends Seeder
      */
     public function run()
     {
-        //factory(App\Fournisseur::class, 50)->create();
+
+    		$faker = Faker\Factory::create();
+    		$limit = 50;
+
+    		for ($i=0; $i < $limit; $i++) { 
+    			DB::table('fournisseur')->insert(
+    				[
+    				'name'=>$faker->name,
+    				'email'=>$faker->email,
+    				'telephone'=>$faker->phoneNumber,
+    				'adresse'=>$faker->address,
+    				]
+    			);
+    		}
     }
 }

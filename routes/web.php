@@ -13,9 +13,7 @@
 
 
 Route::get('/', function () {
-    //return view('welcome')->with('variable', "Hello FROM HOME");
-	 $admins = DB::table('admins')->get();
-	 dd($admins);
+
 });
 
 
@@ -37,10 +35,14 @@ Route::get('/select_admins_using_model', 'admin@select_admins_using_model');
 
 Route::get('admins/create', 'admin@create');
 
-Route::post('admins/inserted', 'admin@store');
+Route::get('admins/inserted', 'admin@store');
 
 
 
 
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUtilisateurTable extends Migration
+class CreateFournisseurTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateUtilisateurTable extends Migration
      */
     public function up()
     {
-        Schema::create('utilisateur', function (Blueprint $table) {
-            $table->increments('code_utilisateur');
-            $table->unsignedInteger('id_type');
+        Schema::create('fournisseur', function (Blueprint $table) {
+            $table->increments('code_fournisseur');
             $table->string('name');
             $table->string('adresse');
             $table->string('email')->unique();

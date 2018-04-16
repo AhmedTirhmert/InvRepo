@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminsTable extends Migration
+class CreateFkUserTypeutlTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateAdminsTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('admins', function (Blueprint $table) {
-            $table->increments('id_admin');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('id_type')->references('id_type')->on('type_user');
         });
     }
 
@@ -29,6 +25,6 @@ class CreateAdminsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admins');
+        Schema::dropconstraint('fk_utilisateur_typeutl');
     }
 }

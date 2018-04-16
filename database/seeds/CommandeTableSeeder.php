@@ -20,8 +20,8 @@ class CommandeTableSeeder extends Seeder
     				
     				
     				'id_etat'=>$faker->numberBetween(1,2),
-    				'id_admin'=>$faker->numberBetween(1,10),
-            'code_utilisateur'=>$faker->numberBetween(1,50),
+    				'id_admin'=>$faker->numberBetween(1,2),
+            'id_client'=>$faker->numberBetween(3,25),
     				'date_effectue'=>$faker->date,
     				
     				]

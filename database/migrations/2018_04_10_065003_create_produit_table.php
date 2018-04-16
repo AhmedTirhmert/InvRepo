@@ -16,7 +16,7 @@ class CreateProduitTable extends Migration
         Schema::create('produit', function (Blueprint $table) {
             $table->increments('code_produit');
             $table->string('Reference',8)->unique;
-            $table->unsignedInteger('code_utilisateur');
+            $table->unsignedInteger('code_fournisseur');
             $table->unsignedInteger('code_categorie');
             $table->string('designation');
             $table->double('prix_unitaire');

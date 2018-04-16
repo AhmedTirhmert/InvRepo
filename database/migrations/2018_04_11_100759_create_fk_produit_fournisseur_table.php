@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFkCommandeUtilisateurTable extends Migration
+class CreateFkProduitFournisseurTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateFkCommandeUtilisateurTable extends Migration
      */
     public function up()
     {
-        Schema::table('commande', function (Blueprint $table) {
-            $table->foreign('code_utilisateur')->references('code_utilisateur')->on('utilisateur');
-            
+        Schema::table('produit', function (Blueprint $table) {
+            $table->foreign('code_fournisseur')->references('code_fournisseur')->on('fournisseur');
         });
     }
 
@@ -26,6 +25,6 @@ class CreateFkCommandeUtilisateurTable extends Migration
      */
     public function down()
     {
-        Schema::dropconstraint('fk_commande_client');
+        Schema::dropconstraint('fk_fournir_produit');
     }
 }

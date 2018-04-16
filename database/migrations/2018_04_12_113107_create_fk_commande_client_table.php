@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFkCommandeAdminsTable extends Migration
+class CreateFkCommandeClientTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateFkCommandeAdminsTable extends Migration
     public function up()
     {
         Schema::table('commande', function (Blueprint $table) {
-            $table->foreign('id_admin')->references('id_admin')->on('admins');
+            $table->foreign('id_client')->references('id')->on('users');
         });
     }
 
