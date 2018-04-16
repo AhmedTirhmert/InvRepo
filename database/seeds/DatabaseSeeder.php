@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
 
         /*$this->call(EtatcommandeTableSeeder::class);
         $this->call(TypeutilisateurTableSeeder::class);
