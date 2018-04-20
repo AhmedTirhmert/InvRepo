@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use DB;
+use Auth;
 class HomeController extends Controller
 {
     /**
@@ -22,7 +23,17 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('home');
+    {   
+        $user = Auth::user();
+
+        $commandes = DB::table('commande')->whereId_client($user->id)
+                        ->leftJoin('etat_commande', 'etat_commande.id_etat', '=', 'commande.id_etat')
+                        ->leftJoin('users', 'users.id', '=', 'commande.id_admin')
+                        ->orderByRaw('commande.date_effectue DESC')
+                        ->get();
+        
+        return view('home')->with([
+                                    'commandes' => $commandes
+                                ]);
     }
 }

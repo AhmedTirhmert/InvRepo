@@ -8,6 +8,37 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
+
+
+
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function Dashboard()
+    {
+        $admins = DB::table('users')->whereId_type(1)->get();
+        $clients = DB::table('users')->whereId_type(2)->get();
+        $fournisseurs = DB::table('fournisseur')->take(6)->get();
+        return view('Dashboard')->with([
+                                        'admins' => $admins , 
+                                        'clients'  => $clients,
+                                        'fournisseurs' => $fournisseurs
+                                        ]);       
+    }
+
+
+
+
+
     public function contact(){
         //echo"Hello From contact function inside controller ";
 

@@ -12,9 +12,7 @@
 */
 
 
-Route::get('/', function () {
 
-});
 
 
 Route::get('/mypage', 'TestController@contact');
@@ -41,8 +39,12 @@ Route::get('admins/inserted', 'admin@store');
 
 
 
-
+Route::resource('adminsform' , 'TestController@insertadmin');
 
 Auth::routes();
 
+Route::get('/', 'HomeController@index')->name('home');
+
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/Dashboard', 'TestController@Dashboard')->name('Dashboard');

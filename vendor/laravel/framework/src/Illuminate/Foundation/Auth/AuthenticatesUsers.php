@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+use DB;
+
 trait AuthenticatesUsers
 {
     use RedirectsUsers, ThrottlesLogins;
@@ -75,6 +77,7 @@ trait AuthenticatesUsers
      */
     protected function attemptLogin(Request $request)
     {
+
         return $this->guard()->attempt(
             $this->credentials($request), $request->filled('remember')
         );
@@ -116,7 +119,18 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+
+        $role=DB::table('type_user')->select('role')->where('id_type',$user->id_type)->first();
+        echo $role->role;
+        /*dd();*/
+        if ($role->role == "Admin") {
+            redirect('Dashboard');
+            } else {
+            redirect('Dashboard');
+        }
+        
+        
+        
     }
 
     /**

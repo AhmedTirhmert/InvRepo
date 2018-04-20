@@ -79,14 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <h6>u are about to insert the Admin number {{$last_ID + 1}}</h6>
-                    <form method="POST" action="inserted"> 
-                        <input type="Text" name="name" placeholder="name">
-                        <input type="email" name="email" placeholder="email">
-                        <input type="password" name="password" placeholder="password">
-                        <input type="submit" name="submit" value="CREATE">
-                    </form>
-                    
+                    <h6>Welcome to the ADMIN DASHBOARD</h6>
                 </div>
 
                 <div class="links">
