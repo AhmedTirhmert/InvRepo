@@ -14,6 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+
         $this->middleware('auth');
     }
 
@@ -22,6 +23,28 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    public function ajax($id){
+
+        $resp = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','date_effectue')
+                                     ->join('produit','produit.code_produit','=','concerne.code_produit')
+                                     ->join('categorie','produit.code_categorie','=','categorie.code_categorie')
+                                     ->join('commande','commande.Numero_cmnd','=','concerne.Numero_cmnd')
+                                     ->where('commande.numero_cmnd',$id)
+                                     ->get();
+        return response()->json($resp);
+    
+}
+
+
+
+    public function products()
+    {
+          $products = DB::table('produit')->select('prix_unitaire')->orderByRaw('designation ASC')->get();
+        return response()->json($products);
+    }
+
     public function index()
     {   
         $user = Auth::user();
@@ -31,9 +54,22 @@ class HomeController extends Controller
                         ->leftJoin('users', 'users.id', '=', 'commande.id_admin')
                         ->orderByRaw('commande.date_effectue DESC')
                         ->get();
-        
+        $products = DB::table('produit')->orderByRaw('designation ASC')->get();
+        /*dd($products);*/
         return view('home')->with([
-                                    'commandes' => $commandes
+                                    'commandes' => $commandes,
+                                    'products' => $products
                                 ]);
     }
 }
+
+
+
+
+
+
+
+
+
+
+

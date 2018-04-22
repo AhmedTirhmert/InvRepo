@@ -23,6 +23,7 @@ class TestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function Dashboard()
     {
         $admins = DB::table('users')->whereId_type(1)->get();
