@@ -186,31 +186,24 @@ $(document).ready(function () {
 									"3":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
 									"4":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
 									"age":21
-
+										}
 									{
 									   "book": [
-
 									      {
 									         "id": "01",
 									         "language": "Java",
 									         "edition": "third",
 									         "author": "Herbert Schildt"
 									      },
-
 									      {
 									         "id": "07",
 									         "language": "C++",
 									         "edition": "second",
 									         "author": "E.Balagurusamy"
 									      }
-
 									   ]
 									}
 								}*/
-
-
-
-
 								/*var myObject = {};
 
 								for(var i = 0; i <10; i++) {
@@ -225,21 +218,8 @@ $(document).ready(function () {
 								}
 
 								var json = JSON.stringify(myObject);*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 							// make an empty object
-							var myObject = {};
+							
 
 							// set the "list1" property to an array of strings
 							//myObject.list1 = ['1', '2'];
@@ -250,7 +230,6 @@ $(document).ready(function () {
 							//myObject.list2[0] = 'a';
 							//myObject['list2'][1] = 'b';
 
-							myObject.products = [];
 							// instead of placing properties at specific indices, you
 							// can push them on to the end
 							//myObject.products.push({});
@@ -282,20 +261,19 @@ $(document).ready(function () {
 							employees['firstname']="hello"
 							employees['lastname']="hello"
 							sitePersonel.employees = employees;
-							sitePersonel.manager = "";*/								
+							sitePersonel.manager = "";*/
+							var myObject = {};
+							myObject.products = [];								
 							var btns = document.getElementsByClassName('id_btn');
 							for (var i = 1 ; i < new_cmnd_products_table.rows.length; i++) {
 								myObject.products.push({
 									"Code_produit":Number(btns[i-1].id),
-									//"PRODUIT":new_cmnd_products_table.rows[i].cells[0].innerHTML,
 									"QUANTITE":Number(new_cmnd_products_table.rows[i].cells[2].innerHTML)
 								});
-								
 							}
-							
-							
+							myObject.date_effectue = formatdate(new Date());
+							myObject.client_ID = Number( document.getElementById('user_ID').innerHTML);
 
-							//myObject.date_effectue = formatdate(new Date());
 
 
 			
@@ -304,10 +282,11 @@ $(document).ready(function () {
 	    $.ajax({
 	    	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: '/commande/insertNewCommande',
-            type: 'GET',
+            type: 'POST',
             data: myObject,
             success: function(result) {
-            		console.log(result);  
+            	console.log(result);
+
             },
             error: function(result) {
             	console.log(result); 
@@ -320,5 +299,15 @@ $(document).ready(function () {
 
 
 function formatdate(dt){
-	return dt.getDate() +'/'+ (dt.getMonth()+1) +'/'+  dt.getFullYear()
+	return dt.getFullYear() +'-'+ (dt.getMonth()+1) +'-'+  dt.getDate()
 }
+
+
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});

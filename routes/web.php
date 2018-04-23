@@ -32,7 +32,7 @@ Route::get('/select_admins_using_model', 'admin@select_admins_using_model');
 Route::get('admins/create', 'admin@create');
 
 Route::get('admins/inserted', 'admin@store');
-
+ 
 
 
 
@@ -48,4 +48,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/Dashboard', 'TestController@Dashboard')->name('Dashboard');
 Route::get('/products', 'HomeController@products');
 Route::get('/cmnd_dtl/{id}', 'HomeController@ajax');
-Route::post('/commande/insertNewCommande/data', 'HomeController@insertNewCommande');
+Route::post('/commande/insertNewCommande', 'HomeController@insertNewCommande');

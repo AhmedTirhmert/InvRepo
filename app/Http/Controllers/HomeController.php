@@ -25,14 +25,33 @@ class HomeController extends Controller
      */
 
 
-    public function insertNewCommande(Request $request)
-    {
-        dd($request);
-        $resp="I RECIEVED UR REQ";
-        return response()->json($resp);
-    }
+   public function insertNewCommande(Request $request){
 
+        $date_effectue = $request->date_effectue;
+        $client_ID = $request->client_ID;
+        $count = count($request->products);
+        try {
+            $cmnd_id =  DB::table('commande')->insertGetId(
+                                                [
+                                                    'id_client' => $client_ID,
+                                                    'date_effectue' => $date_effectue 
+                                                ]
+                                                );
+            foreach ($request->products as $element ) {
+                        DB::table('concerne')->insert(
+                                                [
+                                                    'code_produit' => $element['Code_produit'],
+                                                    'qte_cmnd' => $element['QUANTITE'],
+                                                    'numero_cmnd' => $cmnd_id   
+                                                ]
+                                                );
+            }
+        } catch (Exception $e) {
+            return response()->json('ERROR MESSAGE : ' .$e->getMessage());
+        }
 
+        return response()->json("OUR PART IS DONE CORRECTLY THANK!"); 
+   }
 
     public function ajax($id){
 

@@ -28,7 +28,6 @@
                         </tr>
                         </thead>
                         @foreach($commandes as $commande)
-                        
                         @if($commande->id_etat == 1)
                         <tr class="table-success" >
                         @elseif($commande->id_etat == 2)
@@ -43,7 +42,6 @@
                             <td >{{$commande->name}}</td>
                             <td><button class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
                         </tr>
-                        
                         @endforeach
                    </table>
 
