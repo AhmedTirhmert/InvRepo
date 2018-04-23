@@ -48,3 +48,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/Dashboard', 'TestController@Dashboard')->name('Dashboard');
 Route::get('/products', 'HomeController@products');
 Route::get('/cmnd_dtl/{id}', 'HomeController@ajax');
+Route::post('/commande/insertNewCommande/data', 'HomeController@insertNewCommande');

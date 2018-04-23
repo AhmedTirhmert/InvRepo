@@ -32,11 +32,13 @@ window.onclick = function(event) {
         if (event.target == cmnd_dtls_modal) {
         cmnd_dtls_modal.style.display = "none";
         $("#cmnd_dtls_table tr:gt(0)").remove();
+        cmnd_dtls_date.innerHTML = "EFFECTUE LE :";
     }
 }
 //initializing input fields
 var btn_ajouter = document.getElementById("ajouter");
 var selected_product = document.getElementById("select_produit");
+var selected_product_id = document.getElementById("select_produit_id");
 var alert_fill = document.getElementById('alert_fill');
 var cmnd_prix_total = document.getElementById("cmnd_prix_total");
 var effectue = document.getElementById("effectue");
@@ -65,6 +67,11 @@ qty.onchange = function() {
 
 }
 
+document.getElementsByClassName("close2")[1].onclick= function(){
+	cmnd_dtls_modal.style.display = "none";
+	$("#cmnd_dtls_table tr:gt(0)").remove();
+	cmnd_dtls_date.innerHTML = "EFFECTUE LE :";
+}
 
 btn_ajouter.onclick = function(){
 
@@ -83,19 +90,20 @@ btn_ajouter.onclick = function(){
 		price.innerHTML =  selected_product[selected_product.selectedIndex].value;
 		q_ty.innerHTML =  qty.value;
 		t_price.innerHTML =  prix_total.value;
-		btn_delete.innerHTML = '<button  class="btn btn-small btn-danger pull-right" onclick="deleteRow(this)">Supprimé</button>'
+		btn_delete.innerHTML = '<button  class="id_btn btn btn-small btn-danger pull-right" onclick="deleteRow(this)" id="'+ selected_product_id[selected_product.selectedIndex].value +'" >Supprimé</button>'
 
 		var sum = 0;
 		for (var i = 1 ; i < new_cmnd_products_table.rows.length; i++) {
 		sum += Number(new_cmnd_products_table.rows[i].cells[3].innerHTML);
 		}
 		cmnd_prix_total.value=sum.toFixed(2);
-
 		qty.value="";
 
 }else{
 	
 	alert_fill.style.display="block";
+	qty.value="";
+	qty.class="has_error";
 	qty.focus();
 }
 }
@@ -135,7 +143,7 @@ $(document).ready(function() {
                     type: 'get',
                     success: function (data) {
                         var locationsArray = data;
-                       console.log(data);
+                       console.log(locationsArray);
                         add_record(locationsArray);
 						
                     }
@@ -164,6 +172,153 @@ function add_record(locationsArray){
 								}
 								
 								cmnd_dtls_total.value=summ.toFixed(2);
-								cmnd_dtls_date.innerHTML += locationsArray[0].date_effectue;;
+								cmnd_dtls_date.innerHTML += locationsArray[0].date_effectue;
 								cmnd_dtls_modal.style.display='block';
+}
+
+
+$(document).ready(function () {
+    $("#effectue").click(function(){
+/*			var sitePersonel = {
+									"0":{Reference: "here is the test", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
+									"1":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
+									"2":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
+									"3":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
+									"4":{Reference: "40081984", designation: "Et vero qui.", Libelle: "Equipment Bureau", prix_unitaire: 71.445, qte_cmnd: 5},
+									"age":21
+
+									{
+									   "book": [
+
+									      {
+									         "id": "01",
+									         "language": "Java",
+									         "edition": "third",
+									         "author": "Herbert Schildt"
+									      },
+
+									      {
+									         "id": "07",
+									         "language": "C++",
+									         "edition": "second",
+									         "author": "E.Balagurusamy"
+									      }
+
+									   ]
+									}
+								}*/
+
+
+
+
+								/*var myObject = {};
+
+								for(var i = 0; i <10; i++) {
+								   myObject.date_effect = '1981-10-06';
+								  
+								   for(var i = 0; i <10; i++)  {
+								    myObject.anotherProp = [];
+								       myObject.date_effect.anotherProp.push('somethingElse1');
+								       myObject.date_effect.anotherProp.push('somethingElse2');
+								       myObject.date_effect.anotherProp.push('somethingElse3');
+								    }
+								}
+
+								var json = JSON.stringify(myObject);*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+							// make an empty object
+							var myObject = {};
+
+							// set the "list1" property to an array of strings
+							//myObject.list1 = ['1', '2'];
+
+							// you can also access properties by string
+							//myObject['list2'] = [];
+							// accessing arrays is the same, but the keys are numbers
+							//myObject.list2[0] = 'a';
+							//myObject['list2'][1] = 'b';
+
+							myObject.products = [];
+							// instead of placing properties at specific indices, you
+							// can push them on to the end
+							//myObject.products.push({});
+							// or unshift them on to the beginning
+							
+/*							myObject.products[0]['REFFERENCE'] = '42923787';
+							myObject.products[0]['designation'] = 'Expedita delectus';
+							myObject.products[0]['Libelle'] = 'Equipment Bureau';
+							myObject.products[0]['prix_unitaire'] = '37910';
+							myObject.products[0]['date_effectue'] = '1970-06-09';
+							myObject.products[0]['qte_cmnd'] = '13';
+							myObject.products[1]['REFFERENCE'] = '42923787';
+							myObject.products[1]['designation'] = 'Expedita delectus';
+							myObject.products[1]['Libelle'] = 'Equipment Bureau';
+							myObject.products[1]['prix_unitaire'] = '37910';
+							myObject.products[1]['date_effectue'] = '1970-06-09';
+							myObject.products[1]['qte_cmnd'] = '13';
+							myObject.not_a_list = '11';*/
+							//myObject.products.unshift({});
+						/*
+							myObject.products[i]['PRODUIT'] = new_cmnd_products_table.rows[i].cells[0].innerHTML;
+							console.log(myObject.products[i]['PRODUIT']);
+							myObject.products[i]['QUANTITE'] = Number(new_cmnd_products_table.rows[i].cells[2].innerHTML);
+							console.log(myObject.products[i]['QUANTITE']);*/
+				/*			var employees = []
+							sitePersonel[0].
+							employees['firstname']="hello"
+							employees['lastname']="hello"
+							employees['firstname']="hello"
+							employees['lastname']="hello"
+							sitePersonel.employees = employees;
+							sitePersonel.manager = "";*/								
+							var btns = document.getElementsByClassName('id_btn');
+							for (var i = 1 ; i < new_cmnd_products_table.rows.length; i++) {
+								myObject.products.push({
+									"Code_produit":Number(btns[i-1].id),
+									//"PRODUIT":new_cmnd_products_table.rows[i].cells[0].innerHTML,
+									"QUANTITE":Number(new_cmnd_products_table.rows[i].cells[2].innerHTML)
+								});
+								
+							}
+							
+							
+
+							//myObject.date_effectue = formatdate(new Date());
+
+
+			
+
+			console.log(myObject);  
+	    $.ajax({
+	    	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            url: '/commande/insertNewCommande',
+            type: 'GET',
+            data: myObject,
+            success: function(result) {
+            		console.log(result);  
+            },
+            error: function(result) {
+            	console.log(result); 
+            }
+        });
+    });
+});
+
+
+
+
+function formatdate(dt){
+	return dt.getDate() +'/'+ (dt.getMonth()+1) +'/'+  dt.getFullYear()
 }

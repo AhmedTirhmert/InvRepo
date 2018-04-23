@@ -25,6 +25,15 @@ class HomeController extends Controller
      */
 
 
+    public function insertNewCommande(Request $request)
+    {
+        dd($request);
+        $resp="I RECIEVED UR REQ";
+        return response()->json($resp);
+    }
+
+
+
     public function ajax($id){
 
         $resp = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','date_effectue')

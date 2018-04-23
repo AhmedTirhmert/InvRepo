@@ -70,6 +70,11 @@
                                 <option value="{{$product->prix_unitaire}}">{{$product->designation}}</option>
                             @endforeach
                         </select>
+                        <select id="select_produit_id" class="form-control col-md-5" hidden>
+                            @foreach($products as $product)
+                                <option value="{{$product->code_produit}}"></option>
+                            @endforeach
+                        </select>                        
                        
                         <input id="prix_unitaire"   class="fitt-in form-control col-md-2" type="number" name="qty" placeholder="prix_unitaire" disabled="true">
                         <input id="qty"             class="fitt-in form-control col-md-2" type="number" name="qty" placeholder="Quantité" min="1">
@@ -78,7 +83,7 @@
                     </form>
           </div>
           <div class="alert alert-danger modal2" id="alert_fill">
-              Remplis tout les champs :!
+              Entrer une quantité valide :!
           </div>
           <div class="col-md-12 no-padd">
                    <table class="table table-striped table-responsive-sm col-md-12 " id="new_cmnd_products_table">
