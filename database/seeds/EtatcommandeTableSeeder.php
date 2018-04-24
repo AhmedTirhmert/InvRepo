@@ -13,7 +13,7 @@ class EtatcommandeTableSeeder extends Seeder
     {
         
     
-         	$etat = ['confirmé','refusé'];
+         	$etat = ['confirmé','En attent'];
 
         $faker = Faker\Factory::create();
     		$limit = 2;

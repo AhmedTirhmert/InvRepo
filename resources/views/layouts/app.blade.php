@@ -11,8 +11,12 @@
 
     <title>{{ config('app.name', '') }}</title>
     <link type="text/css" href="bootstrap/css/theme.css" rel="stylesheet">
+    
+<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

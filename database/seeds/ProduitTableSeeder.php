@@ -23,7 +23,7 @@ class ProduitTableSeeder extends Seeder
                     'code_fournisseur'=>$faker->numberBetween(1,50),
     				'designation'=>$faker->text($maxNbChars = 20),
     				'prix_unitaire'=>$faker->randomFloat(),
-    				
+    				'quantite'=>$faker->numberBetween(0,200),
     				]
     			);
     		}   

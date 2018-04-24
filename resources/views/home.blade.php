@@ -31,8 +31,6 @@
                         @if($commande->id_etat == 1)
                         <tr class="table-success" >
                         @elseif($commande->id_etat == 2)
-                        <tr class="table-danger" >
-                        @elseif($commande->id_etat == 3)
                         <tr class="table-warning" >                            
                         @endif  
                          

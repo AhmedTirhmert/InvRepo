@@ -28,11 +28,21 @@ class TestController extends Controller
     {
         $admins = DB::table('users')->whereId_type(1)->get();
         $clients = DB::table('users')->whereId_type(2)->get();
-        $fournisseurs = DB::table('fournisseur')->take(6)->get();
+        $fournisseurs = DB::table('fournisseur')->get();
+        $products = DB::table('produit')->select('Reference','designation','quantite','libelle','prix_unitaire','name')
+                                                ->join('categorie','categorie.Code_categorie','=','produit.Code_categorie')
+                                                ->join('fournisseur','fournisseur.code_fournisseur','=','produit.code_fournisseur')
+                                                ->get();
+        $commandes = DB::table('commande')->whereId_etat(2)
+                                          ->join('users','users.id','=','commande.id_client')
+                                          ->select('numero_cmnd','name','date_effectue')  
+                                          ->get();                                              
         return view('Dashboard')->with([
                                         'admins' => $admins , 
-                                        'clients'  => $clients,
-                                        'fournisseurs' => $fournisseurs
+                                          'clients'  => $clients,
+                                        'fournisseurs' => $fournisseurs,
+                                        'products' => $products,
+                                        'commandes' => $commandes
                                         ]);       
     }
 

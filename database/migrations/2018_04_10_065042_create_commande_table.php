@@ -17,7 +17,7 @@ class CreateCommandeTable extends Migration
             $table->increments('numero_cmnd');
             $table->unsignedInteger('id_client');
             $table->unsignedInteger('id_etat');
-            $table->unsignedInteger('id_admin');
+            $table->unsignedInteger('id_admin')->nullable();
             $table->date('date_effectue');
         });
     }
