@@ -2,8 +2,10 @@
 
 @section('content')
 
-
-
+<?php 
+use Carbon\Carbon ;
+Carbon::setLocale('fr');
+?>
 
 
 </head>
@@ -14,11 +16,11 @@
                 <div class="card-header no-padd">
                             <!-- Nav tabs -->
                           <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#clients">CLIENTS</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#admins">ADMINS</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#fournisseurs">FOURNISSEURS</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#produit">PRODUCTS</a></li>  
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#commandes">COMMANDES</a></li>                                                      
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#clients">CLIENTS <span class="badge badge-large badge-primary">{{count($clients)}}</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#admins">ADMINS <span class="badge badge-primary">{{count($admins)}}</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#fournisseurs">FOURNISSEURS <span class="badge badge-primary">{{count($fournisseurs)}}</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#produit">PRODUCTS <span class="badge badge-primary">{{count($products)}}</span></a></li>  
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#commandes">COMMANDES <span class="badge badge-warning">{{count($commandes)}}</span></a></li>                                                      
                           </ul>
                 </div>
                 <div class="card-body no-padd">
@@ -34,16 +36,18 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                       <div class="tab-content">
                         <div id="clients" class="container tab-pane active no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-6">
-                                          <input id="searche_client" type="text" class="form-control "  placeholder="recherche...">
-                                          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> -->
+                                        <div class="input-group col-md-8">
+                                          <input id="searche_client" type="text" class="form-control col-md-10"  placeholder="Recherche...">
+                                           
                                         </div>
-                                        <div class="btn-group col-md-6" hidden>
-                                            <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
-                                            <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
-                                            <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
+                                        <div class="btn-group-justified col-md-4" >
+                                            <button type="button" class="btn btn-success col-md-8 pull-right">NOUVEAU CLIENT</button>
                                         </div>
                             </div>
+
+
+
+
                             <br>
                             <br>
                             <table class="table table-striped table-responsive-sm table-bordered no-padd">
@@ -52,6 +56,7 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="clients_table" >
@@ -64,6 +69,19 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         @else
                                         <td>Client</td>
                                         @endif
+                                        <td>
+                                            <ul class="nav navbar-nav">
+                                                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <b class="caret"></b></a>
+                                                    <ul class="dropdown-menu pull-left">
+                                                        <li>  <button type="button" class="btn btn-success">NOUVEAU CLIENT</button>  </li>
+                                                        <li>  <button type="button" class="btn btn-success">NOUVEAU CLIENT</button>  </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -71,15 +89,16 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                         </div>
                         <div id="admins" class="container tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-6">
+<!--                                         <div class="input-group col-md-6">
                                           <input id="searche_admin" type="text" class="form-control "  placeholder="recherche...">
-                                          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> -->
-                                        </div>
-                                        <div class="btn-group col-md-6" hidden>
+                                           <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> 
+                                        </div> -->
+<!--                                         <div class="btn-group col-md-6" hidden>
                                             <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
                                             <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
                                             <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
-                                        </div>
+                                        </div> -->
+
                             </div> 
                             <br>
                             <br>                           
@@ -194,12 +213,13 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                             </div>
                             <br>
                             <br>                            
-                            <table class="table table-striped table-responsive-sm table-bordered col-md-12 no-padd" >
+                            <table class="table table-striped table-responsive-sm table-hover table-condensed table-bordered col-md-12 no-padd" >
                                 <thead>
                                     <tr class="thead-dark">
                                         <th>N° Commande</th>
                                         <th>Client</th>
                                         <th>Date effectue</th>
+                                        <th>Detaile</th>
                                     </tr>
                                 </thead>
                                 <tbody id="commande_table" >
@@ -207,7 +227,8 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                     <tr>
                                         <td >{{ $commande->numero_cmnd }}</td>
                                         <td >{{ $commande->name }}</td>
-                                        <td >{{ $commande->date_effectue }}</td>
+                                        <td >{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }} <!--{{$commande->date_effectue}}  --> </td>
+                                        <td><button class="btn btn-small btn-dark pull-left" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -216,6 +237,63 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                       </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="cmnd_dtls_modal" class="modal2">
+
+  <!-- Modal content -->
+    <div class="modal2-content" >
+        <div class="modal2-header">
+            <span class="close2">&times;</span>
+          <h2>Detaile</h2>
+        </div>
+        <div class="modal2-body">
+            <div class="container no-padd">
+
+
+          <div class="col-md-12 no-padd">
+                   <table class="table table-striped table-responsive-sm col-md-10 " id="cmnd_dtls_table1">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th> REFFERENCE </th>
+                            <th> DESIGNATION </th>
+                            <th> CATEGORIE </th>
+                            <th> PRIX UNIT </th>
+                            <th> QUANTITE </th>
+                            <th> PRIX TOTAL </th>
+                            
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="container-fluid">
+                    <table class="table table-striped table-responsive-sm col-md-12 " >
+                        <thead class="thead-dark no-padd">
+                        <tr>
+                            <th><h5><span id="cmnd_dtls_date" class="label label-danger">EFFECTUE LE : </span></h5></th>
+                            <th class="no-padd"><label  for="cmnd_prix_total" class="label label-danger pull-right">PRIX TOTAL DE LA COMMANDE :</label></th><th><input id="cmnd_dtl_prix_total" class="pull-right fitt-in form-control col-md-12" type="number" name="cmnd_tprice" placeholder="" disabled="true"></th>
+                        </tr>
+                        </thead>                  
+                   </table>   
+       </div>
+          </div>
+      </div>
+        </div>
+
+    <div class="modal2-footer">
+      
         </div>
     </div>
 </div>

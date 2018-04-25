@@ -16,7 +16,7 @@ class CreateCommandeTable extends Migration
         Schema::create('commande', function (Blueprint $table) {
             $table->increments('numero_cmnd');
             $table->unsignedInteger('id_client');
-            $table->unsignedInteger('id_etat');
+            $table->unsignedInteger('id_etat')->default(2);
             $table->unsignedInteger('id_admin')->nullable();
             $table->date('date_effectue');
         });

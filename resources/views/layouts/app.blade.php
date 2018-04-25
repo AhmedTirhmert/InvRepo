@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -53,7 +54,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span id="user_ID" class="caret" hidden>{{ Auth::user()->id }}</span>
+                                    {{ Auth::user()->name }} <span id="user_ID" class="" hidden>{{ Auth::user()->id }}</span>
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">

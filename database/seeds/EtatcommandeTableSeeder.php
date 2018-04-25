@@ -23,7 +23,7 @@ class EtatcommandeTableSeeder extends Seeder
     				[
     				
     				
-    				'etat'=>$etat[$faker->unique()->numberBetween(0,1)],
+    				'etat'=>$etat[$i],
     				
     				]
     			);

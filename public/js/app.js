@@ -11,8 +11,11 @@ $(document).ready(function(){
   });
 });
 
+document.getElementsByClassName("close2")[0].onclick = function() { document.getElementById('cmnd_dtls_modal').style.display='none'; };
 
-
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
 
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -159,7 +162,7 @@ $(document).ready(function() {
                     success: function (data) {
                         var locationsArray = data;
                        console.log(locationsArray);
-                        add_record(locationsArray);
+                        add_records(locationsArray);
 						
                     }
                 });
@@ -189,6 +192,31 @@ function add_record(locationsArray){
 								cmnd_dtls_total.value=summ.toFixed(2);
 								cmnd_dtls_date.innerHTML += locationsArray[0].date_effectue;
 								cmnd_dtls_modal.style.display='block';
+}
+
+function add_records(locationsArray){
+								var summ = 0;
+								for (var i = locationsArray.length - 1; i >= 0; i--) {
+	                        	var row = document.getElementById('cmnd_dtls_table1').insertRow(1);
+								var atrb1 = row.insertCell(0);
+								var atrb2 = row.insertCell(1);
+								var atrb3 = row.insertCell(2);
+								var atrb4 = row.insertCell(3);
+								var atrb5 = row.insertCell(4);
+								var atrb6 = row.insertCell(5);
+
+								atrb1.innerHTML = locationsArray[i].Reference;
+								atrb2.innerHTML = locationsArray[i].designation;
+								atrb3.innerHTML = locationsArray[i].Libelle;
+								atrb4.innerHTML = locationsArray[i].prix_unitaire;
+								atrb5.innerHTML = locationsArray[i].qte_cmnd;
+								atrb6.innerHTML = locationsArray[i].qte_cmnd * locationsArray[i].prix_unitaire	;
+								summ += locationsArray[i].qte_cmnd * locationsArray[i].prix_unitaire	;
+								}
+								
+								document.getElementById('cmnd_dtl_prix_total').value=summ.toFixed(2);
+								document.getElementById('cmnd_dtls_date').innerHTML += locationsArray[0].date_effectue;
+								document.getElementById('cmnd_dtls_modal').style.display='block';
 }
 
 
