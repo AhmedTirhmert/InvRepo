@@ -6,12 +6,13 @@
 use Carbon\Carbon ;
 Carbon::setLocale('fr');
 ?>
-
-
+<head>
+   <script src="{{ asset('js/Dashboard.js') }}" defer></script>
 </head>
-<div class="container">
+
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12" style="padding: 0">
+        <div class="col-md-12" >
             <div class="card" >
                 <div class="card-header no-padd">
                             <!-- Nav tabs -->
@@ -29,25 +30,17 @@ Carbon::setLocale('fr');
                             {{ session('status') }}
                         </div>
                     @endif
-<!--                     <div class="alert-border">
-You Welcome Mr/Mss  {{ Auth::user()->name }}
-</div> -->
-                      <!-- Tab panes -->
+
                       <div class="tab-content">
-                        <div id="clients" class="container tab-pane active no-padd"><br>
+                        <div id="clients" class="container-fluid tab-pane active no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-8">
-                                          <input id="searche_client" type="text" class="form-control col-md-10"  placeholder="Recherche...">
-                                           
-                                        </div>
-                                        <div class="btn-group-justified col-md-4" >
-                                            <button type="button" class="btn btn-success col-md-8 pull-right">NOUVEAU CLIENT</button>
-                                        </div>
+                                <div class="input-group col-md-9">
+                                  <input id="searche_client" type="text" class="form-control col-md-6"  placeholder="Recherche..." onkeyup="tables_serache('client')">
+                                </div>
+                                <div class="btn-group btn-group- col-md-3" role="group" aria-label="...">
+                                    <button type="button" class="btn btn-success col-md-12 ">AJOUTER</button>
+                                </div>
                             </div>
-
-
-
-
                             <br>
                             <br>
                             <table class="table table-striped table-responsive-sm table-bordered no-padd">
@@ -57,6 +50,7 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th></th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="clients_table" >
@@ -70,36 +64,24 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         <td>Client</td>
                                         @endif
                                         <td>
-                                            <ul class="nav navbar-nav">
-                                                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                    <b class="caret"></b></a>
-                                                    <ul class="dropdown-menu pull-left">
-                                                        <li>  <button type="button" class="btn btn-success">NOUVEAU CLIENT</button>  </li>
-                                                        <li>  <button type="button" class="btn btn-success">NOUVEAU CLIENT</button>  </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </td>
-
-                                        </td>
+                                            <button type="button" class="btn btn-small btn-danger col-md-12 " onclick="deleteclient({{ $client->id }})">SUPPRIMER</button>                                            
+                                       </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                                </table>                          
                         </div>
-                        <div id="admins" class="container tab-pane fade no-padd"><br>
-                            <div class="btn-group col-md-12 no-padd">
-<!--                                         <div class="input-group col-md-6">
-                                          <input id="searche_admin" type="text" class="form-control "  placeholder="recherche...">
-                                           <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> 
-                                        </div> -->
-<!--                                         <div class="btn-group col-md-6" hidden>
-                                            <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
-                                            <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
-                                            <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
-                                        </div> -->
+                        <div id="admins" class="container-fluid tab-pane fade no-padd"><br>
+                                <div class="btn-group col-md-12 no-padd">
+                                    <div class="input-group col-md-6">
+                                      <input id="searche_admin" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('admin')">
+                                    
+                                    </div> 
+                                    <div class="btn-group col-md-6" >
+                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
 
-                            </div> 
+                                    </div> 
+                                </div> 
                             <br>
                             <br>                           
                             <table class="table table-striped table-condensed table-responsive-sm table-bordered col-md-12 no-padd ">
@@ -108,6 +90,7 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="admins_table">
@@ -120,23 +103,37 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         @else
                                         <td>Client</td>
                                         @endif
+                                        <td>
+                                            
+                                        <div class="btn-group">
+                                          <button type="button" class="btn btn-small btn-primary col-md-12" >MODIFIER</button>
+                                          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                          </button>
+                                          <ul class="dropdown-menu no-padd">
+                                            <li><button type="button" class="btn btn-small btn-danger col-md-12">SUPPRIMER</button></li>
+                                            </ul>
+                                        </div>
+                                                                                
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                                </table>
                         </div>
-                        <div id="fournisseurs" class="container tab-pane fade no-padd"><br>
+                        <div id="fournisseurs" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-6">
-                                          <input id="searche_fournisseur" type="text" class="form-control "  placeholder="recherche...">
-                                          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> -->
-                                        </div>
-                                        <div class="btn-group col-md-6" hidden>
-                                            <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
-                                            <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
-                                            <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
-                                        </div>
-                            </div>
+                                    <div class="input-group col-md-6">
+                                      <input id="searche_fournisseur" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('fournisseur')">
+                                      
+                                    </div> 
+                                    <div class="btn-group col-md-6" >
+                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
+                                        <button type="button" class="btn btn-primary col-md-4">MODIFIER</button>
+                                        <button type="button" class="btn btn-danger col-md-4">SUPRIMMER</button>
+                                    </div> 
+                                </div> 
                             <br>
                             <br>                           
                             <table class="table table-striped table-responsive-sm table-bordered col-md-12 no-padd" >
@@ -160,18 +157,18 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                 </tbody>
                                </table>
                         </div>
-                        <div id="produit" class="container tab-pane fade no-padd"><br>
+                        <div id="produit" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-6">
-                                          <input id="searche_client" type="text" class="form-control "  placeholder="recherche...">
-                                          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> -->
-                                        </div>
-                                        <div class="btn-group col-md-6" hidden>
-                                            <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
-                                            <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
-                                            <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
-                                        </div>
-                            </div>
+                                    <div class="input-group col-md-6">
+                                      <input id="searche_product" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('product')">
+                                      
+                                    </div> 
+                                    <div class="btn-group col-md-6" >
+                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
+                                        <button type="button" class="btn btn-primary col-md-4">MODIFIER</button>
+                                        <button type="button" class="btn btn-danger col-md-4">SUPRIMMER</button>
+                                    </div> 
+                                </div> 
                             <br>
                             <br>                           
                             <table class="table table-striped table-responsive-sm table-bordered col-md-12 no-padd" >
@@ -199,18 +196,14 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                 </tbody>
                                </table>
                         </div>
-                        <div id="commandes" class="container tab-pane fade no-padd"><br>
+                        <div id="commandes" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                        <div class="input-group col-md-6">
-                                          <input id="searche_commande" type="text" class="form-control "  placeholder="recherche...">
-                                          <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span> -->
-                                        </div>
-                                        <div class="btn-group col-md-6" hidden>
-                                            <button type="button" class="btn btn-success col-md-4">AJOUTER CLIENT</button>
-                                            <button type="button" class="btn btn-primary col-md-4">MODIFIER CLIENT</button>
-                                            <button type="button" class="btn btn-danger col-md-4">SUPRIMMER CLIENT</button>
-                                        </div>
-                            </div>
+                                    <div class="input-group col-md-6">
+                                      <input id="searche_commande" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('commande')">
+                                      
+                                    </div> 
+
+                                </div> 
                             <br>
                             <br>                            
                             <table class="table table-striped table-responsive-sm table-hover table-condensed table-bordered col-md-12 no-padd" >
@@ -222,13 +215,13 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                                         <th>Detaile</th>
                                     </tr>
                                 </thead>
-                                <tbody id="commande_table" >
+                                <tbody id="commandes_table" >
                                     @foreach($commandes as $commande)
                                     <tr>
                                         <td >{{ $commande->numero_cmnd }}</td>
                                         <td >{{ $commande->name }}</td>
                                         <td >{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }} <!--{{$commande->date_effectue}}  --> </td>
-                                        <td><button class="btn btn-small btn-dark pull-left" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
+                                        <td><button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -240,14 +233,6 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -265,7 +250,7 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
 
 
           <div class="col-md-12 no-padd">
-                   <table class="table table-striped table-responsive-sm col-md-10 " id="cmnd_dtls_table1">
+                   <table class="table table-striped table-responsive-sm col-md-10 " id="cmnd_dtls_table">
                         <thead class="thead-dark">
                         <tr>
                             <th> REFFERENCE </th>
@@ -278,7 +263,7 @@ You Welcome Mr/Mss  {{ Auth::user()->name }}
                         </tr>
                         </thead>
                     </table>
-                    <div class="container-fluid">
+                    <div class="container-fluid no-padd">
                     <table class="table table-striped table-responsive-sm col-md-12 " >
                         <thead class="thead-dark no-padd">
                         <tr>

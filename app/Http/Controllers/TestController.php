@@ -35,7 +35,8 @@ class TestController extends Controller
                                                 ->get();
         $commandes = DB::table('commande')->whereId_etat(2)
                                           ->join('users','users.id','=','commande.id_client')
-                                          ->select('numero_cmnd','name','date_effectue')  
+                                          ->select('numero_cmnd','name','date_effectue') 
+                                          ->orderByRaw('date_effectue DESC')
                                           ->get();                                              
         return view('Dashboard')->with([
                                         'admins' => $admins , 
@@ -45,10 +46,6 @@ class TestController extends Controller
                                         'commandes' => $commandes
                                         ]);       
     }
-
-
-
-
 
     public function contact(){
         //echo"Hello From contact function inside controller ";

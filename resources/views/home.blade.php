@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<head>
+       <script src="{{ asset('js/Home.js') }}" defer></script>
+</head>
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-12" >
             <div class="card">
@@ -54,10 +57,10 @@
     <div class="modal2-content" >
         <div class="modal2-header">
             <span class="close2">&times;</span>
-          <h2>Nouvelle Commande</h2>
+          <h2 class="no-margin">Nouvelle Commande</h2>
         </div>
         <div class="modal2-body">
-            <div class="container no-padd">
+            <div class="container-fluid no-padd">
                 <div class="col-md-12 alert alert-border no-padd" style="padding: 0">
                     <form class="col-md-12 form-inline no-padd" >
 
@@ -110,7 +113,7 @@
 
     <div class="modal2-footer">
         <div class="col-md-12">
-            <div class="col-md-4" style="right: 0px">
+            <div class="col-md-4" >
             <button  class="btn btn-large btn-danger " id="btn-close">Annulé</button>
             <button  class="btn btn-large btn-primary " name="effectue" id="effectue"  type="submit" >effectué</button>
             </div> 
@@ -129,10 +132,10 @@
     <div class="modal2-content" >
         <div class="modal2-header">
             <span class="close2">&times;</span>
-          <h2>Detaile</h2>
+          <h2 class="no-margin" id="cmnd_dtls_header">Commande N°=</h2>
         </div>
         <div class="modal2-body">
-            <div class="container no-padd">
+            <div class="container-fluid no-padd alert alert-border">
 
 
           <div class="col-md-12 no-padd">
@@ -149,7 +152,7 @@
                         </tr>
                         </thead>
                     </table>
-                        <table class="table table-striped table-responsive-sm col-md-12 " >
+                        <table class="table table-striped table-responsive-sm col-md-12 no-margin" >
                         <thead class="thead-dark no-padd">
                         <tr>
                             <th><h5><span id="cmnd_dtls_date" class="label label-danger">EFFECTUE LE : </span></h5></th>
@@ -162,9 +165,6 @@
       </div>
         </div>
 
-    <div class="modal2-footer">
-      
-        </div>
     </div>
 </div>
 

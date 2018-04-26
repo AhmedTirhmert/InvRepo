@@ -16,7 +16,7 @@
 <!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    
 
 
     <!-- Fonts -->
