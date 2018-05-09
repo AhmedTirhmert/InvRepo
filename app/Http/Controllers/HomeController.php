@@ -50,30 +50,27 @@ class HomeController extends Controller
             return response()->json('ERROR MESSAGE : ' .$e->getMessage());
         }
 
-        return response()->json("OUR PART IS DONE CORRECTLY THANK!"); 
+        return response()->json("Your commande is done waitnig for the admin to approve it !"); 
    }
 
-    public function ajax($id){
+    public function cmnd_dtl($id){
 
-        $resp = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','date_effectue')
+        $resp = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','quantite','date_effectue','name')
                                      ->join('produit','produit.code_produit','=','concerne.code_produit')
                                      ->join('categorie','produit.code_categorie','=','categorie.code_categorie')
                                      ->join('commande','commande.Numero_cmnd','=','concerne.Numero_cmnd')
+                                     ->join('users','commande.id_client','=','users.id')
                                      ->where('commande.numero_cmnd',$id)
                                      ->get();
         return response()->json($resp);
     
-}
-
-
-
-    public function products()
-    {
-          $products = DB::table('produit')->select('prix_unitaire')->orderByRaw('designation ASC')->get();
-        return response()->json($products);
     }
 
-    public function index()
+
+
+
+
+    public function home()
     {   
         $user = Auth::user();
 
@@ -83,12 +80,28 @@ class HomeController extends Controller
                         ->orderByRaw('commande.date_effectue DESC')
                         ->get();
         $products = DB::table('produit')->orderByRaw('designation ASC')->get();
-        /*dd($products);*/
         return view('home')->with([
                                     'commandes' => $commandes,
                                     'products' => $products
                                 ]);
     }
+    public function index()
+    {
+        return redirect('home');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

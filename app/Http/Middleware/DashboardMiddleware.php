@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Auth;
+class DashboardMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $user_type = Auth::user()->id_type;
+
+        if ($user_type != 1) {
+            return redirect('home');
+        }
+        return $next($request);
+    }
+}

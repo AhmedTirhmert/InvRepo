@@ -120,14 +120,12 @@ trait AuthenticatesUsers
     protected function authenticated(Request $request, $user)
     {
 
-        $role=DB::table('type_user')->select('role')->where('id_type',$user->id_type)->first();
-        echo $role->role;
-        /*dd();*/
-        if ($role->role == "Admin") {
+
+/*        if ($user->id_type == 1) {
             redirect('Dashboard');
             } else {
             redirect('Dashboard');
-        }
+        }*/
         
         
         

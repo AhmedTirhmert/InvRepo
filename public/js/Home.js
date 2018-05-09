@@ -48,6 +48,8 @@ var cmnd_dtls_table = document.getElementById("cmnd_dtls_table");
 var table_commandes = document.getElementById("table_commandes");
 var cmnd_dtls_total = document.getElementById('cmnd_dtl_prix_total');
 var cmnd_dtls_date = document.getElementById('cmnd_dtls_date');
+var new_cmnd_products = [];	
+
 
 //initializing input fields
 
@@ -68,8 +70,11 @@ closing();
 }
 
 btn_ajouter.onclick = function(){
-
-	if (qty.value &&  qty.value != 0 && qty.value > 0 && selected_product[selected_product.selectedIndex].value) {
+	alert_fill.style.display="none";
+	if ( qty.value != 0 && qty.value > 0 && selected_product[selected_product.selectedIndex].value) {
+		if ((new_cmnd_products.indexOf(selected_product[selected_product.selectedIndex].text)) < 0) {
+			new_cmnd_products[selected_product_id[selected_product.selectedIndex].value]=selected_product[selected_product.selectedIndex].text;
+		
 		alert_fill.style.display="none";
 		var raw = new_cmnd_products_table.insertRow(1);
 		var id = new_cmnd_products_table.rows.length
@@ -92,13 +97,14 @@ btn_ajouter.onclick = function(){
 		}
 		cmnd_prix_total.value=sum.toFixed(2);
 		qty.value="";
+		}else{$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');alert_fill.innerHTML="this product already added to this commande";alert_fill.style.display="block";}
 
 }else{
 	
-	alert_fill.style.display="block";
+	alert_fill.style.display="block";$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');
 	qty.value="";
 	qty.class="has_error";
-	qty.focus();
+	/*qty.focus();*/
 }
 }
 btn_cls.onclick = function() {
@@ -111,12 +117,8 @@ function deleteRow(btn) {
 	var nbr = Number(cmnd_prix_total.value).toFixed(2);
 	var d_nbr = Number(row.cells[3].innerHTML).toFixed(2);
 	var rest = nbr - d_nbr;
-
-/*
-	window.alert(nbr);
-	window.alert(d_nbr);
-	window.alert(rest);*/
-
+	delete new_cmnd_products[btn.id]
+	alert_fill.style.display="none";
   	cmnd_prix_total.value = rest.toFixed(2) ;
   	row.parentNode.removeChild(row);
 }
@@ -130,7 +132,6 @@ $(document).ready(function() {
                     type: 'get',
                     success: function (data) {
                         var locationsArray = data;
-                       console.log(locationsArray,id);
                         add_record(locationsArray,id);
 						
                     }
@@ -183,21 +184,22 @@ $(document).ready(function () {
 							myObject.date_effectue = formatdate(new Date());
 							myObject.client_ID = Number( document.getElementById('user_ID').innerHTML);
 
-
-			
-
-			console.log(myObject);  
+			/*console.log(myObject);  */
 	    $.ajax({
 	    	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: '/commande/insertNewCommande',
             type: 'POST',
             data: myObject,
             success: function(result) {
-            	window.alert(result);
+            	$("#alert_fill").html(result);
+            	$("#alert_fill").removeClass('alert-danger');
+            	$("#alert_fill").addClass('alert-success');
+            	$("#alert_fill").css('display','block');
+            	$("#new_cmnd_products_table tr:gt(0)").remove();
 
             },
             error: function(result) {
-            	console.log(result); 
+            	/*console.log(result); */
             }
         });
     });
@@ -217,7 +219,7 @@ function closing()
 		modal.style.display = "none";
 		alert_fill.style.display="none";
 		
-
+		new_cmnd_products = [];	
 
 	 	cmnd_dtls_modal.style.display = "none";
         $("#cmnd_dtls_table tr:gt(0)").remove();

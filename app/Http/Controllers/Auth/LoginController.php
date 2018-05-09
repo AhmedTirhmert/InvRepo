@@ -25,8 +25,8 @@ use AuthenticatesUsers;
 
 protected function authenticated(Request $request, $user)
 {
-    $role=DB::table('type_user')->select('role')->where('id_type',$user->id_type)->first();
-    if ($role->role == "Admin") {
+    //$role=DB::table('type_user')->select('role')->where('id_type',$user->id_type)->first();
+    if ($user->id_type == 1) {
         return redirect()->route('Dashboard');
         } else {
         return redirect()->route('home');

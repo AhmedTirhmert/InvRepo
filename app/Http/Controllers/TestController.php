@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 use DB;
+use Auth;
 use App\admin;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
-
+Carbon::setLocale('fr');
 class TestController extends Controller
 {
 
@@ -26,187 +29,636 @@ class TestController extends Controller
 
     public function Dashboard()
     {
-        $admins = DB::table('users')->whereId_type(1)->get();
-        $clients = DB::table('users')->whereId_type(2)->get();
-        $fournisseurs = DB::table('fournisseur')->get();
-        $products = DB::table('produit')->select('Reference','designation','quantite','libelle','prix_unitaire','name')
-                                                ->join('categorie','categorie.Code_categorie','=','produit.Code_categorie')
-                                                ->join('fournisseur','fournisseur.code_fournisseur','=','produit.code_fournisseur')
-                                                ->get();
-        $commandes = DB::table('commande')->whereId_etat(2)
-                                          ->join('users','users.id','=','commande.id_client')
-                                          ->select('numero_cmnd','name','date_effectue') 
-                                          ->orderByRaw('date_effectue DESC')
-                                          ->get();                                              
-        return view('Dashboard')->with([
-                                        'admins' => $admins , 
-                                          'clients'  => $clients,
-                                        'fournisseurs' => $fournisseurs,
-                                        'products' => $products,
-                                        'commandes' => $commandes
-                                        ]);       
+
+            $admins = DB::table('users')->whereId_type(1)->get();
+            $clients = DB::table('users')->whereId_type(2)->get();
+            $years = DB::select('SELECT DISTINCT YEAR(date_effectue) AS year FROM commande ORDER BY year DESC');
+            $fournisseurs = DB::table('fournisseur')->get();
+            $products = DB::table('produit')->select('code_produit','Reference','designation','quantite','libelle','prix_unitaire','name')
+                                                    ->join('categorie','categorie.Code_categorie','=','produit.Code_categorie')
+                                                    ->join('fournisseur','fournisseur.code_fournisseur','=','produit.code_fournisseur')
+                                                    ->get();
+            $commandes = DB::table('commande')->whereId_etat(2)
+                                              ->join('users','users.id','=','commande.id_client')
+                                              ->select('numero_cmnd','name','date_effectue') 
+                                              ->orderByRaw('date_effectue DESC')
+                                              ->get();   
+            $categories = DB::table('categorie')->get();                                                                                     
+            return view('Dashboard')->with([
+                                            'admins' => $admins , 
+                                            'clients'  => $clients,
+                                            'fournisseurs' => $fournisseurs,
+                                            'products' => $products,
+                                            'commandes' => $commandes,
+                                            'categories' => $categories,
+                                            'years'=>$years
+                                            ]);       
     }
 
-    public function contact(){
-        //echo"Hello From contact function inside controller ";
 
-        /*$admins = DB::table('Admins')->get();
-        echo "<li>".$admins->name."</li>";*/
 
-        $admins = DB::table('Admins')->get();
-        foreach ($admins as $elem ) {
-        	echo "<li>".$elem->name."</li>";
+   	public function User_Existence($name,$email)
+    {
+        $email_existe = DB::table('users')->select('id')->where('email',$email)->get();
+        $name_existe = DB::table('users')->select('id')->where('name',$name)->get();
+
+
+            if ((count($name_existe) != 0)) {
+                return response()->json(['response'=>false,'Message'=>"name already existe"]);
+            }elseif (count($email_existe) != 0) {
+                return response()->json(['response'=>false,'Message'=>"email already existe"]);
+            }else{
+                return response()->json(['response'=>true,'Message'=>"go ahead"]);
+            }
+    }
+
+
+    function get_user_info($id)
+    {
+        $client_info = DB::table('users')->select('name','email','password')->where('id' , '=' , $id)->get();
+                                                     
+        return response()->json($client_info);
+    }
+
+
+
+
+    public function insertNewUser(Request $request)
+    {
+
+        $name=$request->name;
+        $email=$request->email;
+        $password=$request->password;
+        if ($request->type == "client") {
+                    DB::table('users')->insert(
+                                                        [   'name' => $name, 
+                                                            'email' => $email, 
+                                                            'password' => Hash::make($password), 
+                                                            'id_type' => 2, 
+                                                        ]
+                                                        );
+                    return response()->json("The Client inserted successfully");
+        }else{
+             DB::table('users')->insert(
+                                            [   'name' => $name,
+                                                'email' => $email,
+                                                'password' => Hash::make($password),
+                                                'id_type' => 1,
+                                            ]
+                                            );
+                    return response()->json("The admin inserted successfully");
         }
-        
-    }
-    public function insertAdmin()
-    {
-    	DB::table('Admins')->insertGetId(
-    		array(
-    			'Name' => 'Rehma Maissou' ,
-    			'email' => 'Rehma@gmail.com',
-    			'password' => 'kvgdskvbq'
-    	 		)
-    	);
-    	return 'insertion complete';
-
-
-
-    	/*$id=DB::table('Admins')->insertGetId(
-    		array(
-    			'Name' => 'Ahmed Tirhmert' ,
-    			'email' => 'Ahmed@gmail.com',
-    			'password' => 'kvgdskvbq'
-    	 		)
-    	);
-    	return 'insertion complete for id = '.$id;*/
     }
 
-    public function selectadminsnames()
+
+    function update_user(Request $request)
     {
 
-    	$usersname=DB::select("SELECT name FROM Admins ORDER BY id_admin" );
-    	foreach ($usersname as $element ) {
-    		echo "<ul>";
-    		/*echo "<li>".$element->id_admin."</li>";
-    		echo "<ul>";*/
-    		echo "<li>".$element->name."</li>";
-    		/*echo "<li>".$element->email."</li>";
-    		echo "<li>".$element->password."</li>";
-    		echo "</ul>";*/
-    		echo "</ul>";
-    	}
+        $email_existe = DB::table('users')->whereEmail($request->email)->get();
+        $name_existe = DB::table('users')->wherename($request->name)->get();
+        $user_info = DB::table('users')->whereid($request->id)->get();
+        if ((count($email_existe) == 0) && (count($name_existe) == 0)) {
+                DB::table('users')->where('id',$request->id)->update([
+                                                                        'name' => $request->name,
+                                                                        'email' => $request->email,
+                                                                        'password' => Hash::make($request->password),
+                                                                        ]);
+                return response()->json(['response'=>true,'Message'=>"user info updated successfully"]);
 
+        }elseif (($user_info[0]->email == $request->email) || ($user_info[0]->name == $request->name)) {
+                if ($user_info[0]->email == $request->email) {
+                    if ((count($name_existe) != 0) && ($name_existe[0]->name != $user_info[0]->name)) {
+                        return response()->json(['response'=>false,'Message'=>"user name u entered already existe"]);
+                    }else{
+                        DB::table('users')->where('id',$request->id)->update(['password' => Hash::make($request->password),'name'=>$request->name]);
+                        return response()->json(['response'=>true,'Message'=>"user info updated successfully"]);
+                    }    
+                }elseif ($user_info[0]->name == $request->name) {
+                    if ((count($email_existe) != 0) && ($email_existe[0]->email != $user_info[0]->email)) {
+                        return response()->json(['response'=>false,'Message'=>"user email u entered already existe"]);
+                    }else{
+                        DB::table('users')->where('id',$request->id)->update(['password' => Hash::make($request->password),'email'=>$request->email]);  
+                        return response()->json(['response'=>true,'Message'=>"user infos successfully"]);
+                    }    
+                }else{
+                        DB::table('users')->where('id',$request->id)->update(['password' => Hash::make($request->password)]);  
+                        return response()->json(['response'=>true,'Message'=>"user infos successfully"]);
+                }
+        }else{
 
+                return response()->json(['response'=>false,'Message'=>"The Info u entered already existe"]);
+        }
     }
-   	public function selectadminname($id)
+
+
+
+    public function Fournisseur_Existence($name,$email,$telephone)
     {
-    	//$maxid=DB::selectOne("SELECT MAX(id_admin) as max FROM Admins");
-    	$maxid=DB::table('admins')->max('id_admin');
-    	
-
-  	if ($id <= $maxid and $id > 0) {
-    		
-    	
-    	$adminname=DB::selectOne("SELECT name FROM Admins WHERE id_admin=".$id." ORDER BY id_admin" );
-    		
-    		echo "<h3> your requested admin name is = <b>".$adminname->name."</b></h3>";
-    		/*dd($adminname);*/
-
-		}else{echo "ID OUT OF RANGE";}
-    	
+        $email_existe = DB::table('fournisseur')->where('email',$email)->get();
+        $name_existe = DB::table('fournisseur')->where('name',$name)->get();
+        $telephone_existe = DB::table('fournisseur')->where('telephone',$telephone)->get();
 
 
+            if ((count($name_existe) != 0)) {
+                return response()->json(['response'=>false,'Message'=>"name already existe"]);
+            }elseif (count($email_existe) != 0) {
+                return response()->json(['response'=>false,'Message'=>"email already existe"]);
+            }elseif (count($telephone_existe) != 0) {
+                return response()->json(['response'=>false,'Message'=>"telephone already existe"]);
+            }else{
+                return response()->json(['response'=>true,'Message'=>"go ahead"]);
+            }
+
+                  
     }
 
-    public function selectallproducts()
-    {
-
-    	$products=DB::select("SELECT * FROM Produit");
-    	
-
-    		echo "<table >";
-    		echo "<thead >";
-    		echo "<tr><td>Code</td><td>Reference</td><td>Designation</td><td>Prix Unitaire</td></tr>";
-    		echo "</thead >";
-    		echo "<tbody >";
-    		foreach ($products as $element ) {
-    			echo "<tr>";
-    			echo "<td>". $element->code_produit ."</td>";
-    			echo "<td>". $element->Reference ."</td>";
-    			echo "<td>". $element->designation ."</td>";
-    			echo "<td>". $element->prix_unitaire ."</td>";
-    			echo "</tr>";
-    		}
-    		echo "</tbody >";
-    		echo "<table>";
-
-    	
-
-    }
-        public function selectallproductswithcategorie()
-    {
-
-    	$products=DB::table('produit')
-    					->join('Categorie','produit.Code_categorie','=','Categorie.Code_categorie')
-    					->join('utilisateur','produit.code_utilisateur','=','utilisateur.code_utilisateur')
-    					->get();
-    	
-			
-    		echo "<table >";
-    		echo "<thead >";
-    		echo "<tr>
-    			<td>Referance</td>
-    			<td>Designation</td>
-    			<td>Prix Unitaire</td>
-    			<td>Type</td>
-    			<td>fournir par</td>
-    			</tr>";
-    		echo "</thead >";
-    		echo "<tbody >";
-    		foreach ($products as $element ) {
-    			echo "<tr>";
-    			echo "<td>". $element->Reference ."</td>";
-    			echo "<td>". $element->designation ."</td>";
-    			echo "<td>". $element->prix_unitaire ."</td>";
-    			echo "<td>". $element->libelle ."</td>";
-    			echo "<td>". $element->name ."</td>";
-    			echo "</tr>";
-    		}
-    		echo "</tbody >";
-    		echo "<table>";
-
-    	
-
-    }
-
-
-    public function selectalltypesamounts()
+    public function insertNewFournisseur(Request $request)
     {
 
-    	$types_amounts=DB::table('Produit')
-    						->select('Code_categorie',DB::Raw('count(prix_unitaire) as number,SUM(prix_unitaire) as amount'))
-    						->groupBy('Code_categorie')
-    						->get();
-
-
-
-		echo "<table >";
-		echo "<thead >";
-		echo "<tr><td>code categorie</td><td>total amount</td><td>number</td></tr>";
-		echo "</thead >";
-		echo "<tbody >";
-		foreach ($types_amounts as $element ) {
-			echo "<tr>";
-			echo "<td>". $element->Code_categorie ."</td>";
-			echo "<td>". $element->amount ."</td>";
-			echo "<td>". $element->number ."</td>";
-			echo "</tr>";
-		}
-		echo "</tbody >";
-		echo "<table>";				
+         DB::table('fournisseur')->insert(
+                                    [   
+                                        'name' => $request->name,
+                                        'email' => $request->email,
+                                        'telephone' => $request->telephone,
+                                        'adresse' => $request->adresse,
+                                    ]
+                                    );
+                    return response()->json("The Fournisseur inserted successfully");
 
     }
+
+
+    function get_fournisseur_info($Code_fournisseur)
+    {
+        $fournisseur_info = DB::table('fournisseur')->select('name','email','adresse','telephone')->where('Code_fournisseur' , '=' , $Code_fournisseur)->get();
+                                                     
+        return response()->json($fournisseur_info);
+
+    }
+
+    function update_Fournisseur(Request $request)
+    {
+        //data exestience 
+        $email_existe = DB::table('fournisseur')->whereEmail($request->email)->get();
+        $name_existe = DB::table('fournisseur')->wherename($request->name)->get();
+        $telephone_existe = DB::table('fournisseur')->wherename($request->telephone)->get();
+        //actual fournisseur data
+        $fournisseur_info = DB::table('fournisseur')->whereCode_fournisseur($request->Code_fournisseur)->get();
+        if ( (count($email_existe) == 0) &&  (count($name_existe) == 0) &&  (count($telephone_existe) == 0) ) 
+        {
+                DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                        'name' => $request->name,
+                                                                                                        'email' => $request->email,
+                                                                                                        'telephone' => $request->telephone,
+                                                                                                        'adresse' => $request->adresse,
+                                                                                                        ]);
+                            if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur data (name email telephone) updated successfully"]);           
+                            }else {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur data (name email telephone adresse) updated successfully"]);
+                            }
+        }elseif (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->name == $request->name) && ($fournisseur_info[0]->telephone == $request->telephone)){
+                            if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"Nothing To Update !! ^_^"]);         
+                            }else {
+                                DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update(['adresse' => $request->adresse]);  
+                                return response()->json(['response'=>true,'Message'=>"fournisseur adresse updated successfully"]);                              
+                            }                                
+        }elseif (($fournisseur_info[0]->email == $request->email) || ($fournisseur_info[0]->name == $request->name) || ($fournisseur_info[0]->telephone == $request->telephone)) {
+
+                if (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->name == $request->name)) {
+                    if ((count($telephone_existe) != 0) && ($name_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
+                            return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                    }else{
+                            DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                    'telephone' => $request->telephone,
+                                                                                                                    'adresse' => $request->adresse,
+                                                                                                                         ]);
+
+                            if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur phone updated successfully"]);           
+                            }else {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur telephone and adresse updated successfully"]);
+                            }                     
+                    }
+                }elseif (($fournisseur_info[0]->name == $request->name) && ($fournisseur_info[0]->telephone == $request->telephone)) {
+                    if ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
+                            return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                    }else{
+                            DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                    'email' => $request->email,
+                                                                                                                    'adresse' => $request->adresse,
+                                                                                                                         ]);
+
+                           if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur email updated successfully"]);           
+                            }else {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur email and adresse updated successfully"]);
+                            }                       
+                    }               
+                }elseif (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->telephone == $request->telephone)) {
+                    if ((count($name_existe) != 0) && ($email_existe[0]->name != $fournisseur_info[0]->name)) {
+                            return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                    }else{
+                            DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                    'name' => $request->name,
+                                                                                                                    'adresse' => $request->adresse,
+                                                                                                                         ]);
+                            if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur name updated successfully"]);           
+                            }else {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur name and adresse updated successfully"]);
+                            }
+                    }                     
+                }elseif ($fournisseur_info[0]->email == $request->email) {
+                    if ((count($name_existe) != 0) && ($name_existe[0]->name != $fournisseur_info[0]->name)) {
+                                return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                    }elseif ((count($telephone_existe) != 0) && ($name_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
+                                return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                    }else{
+                            DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                    'name' => $request->name,
+                                                                                                                    'telephone' => $request->telephone,
+                                                                                                                    'adresse' => $request->adresse,
+                                                                                                                     ]);
+
+
+                           if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur name and telephone updated successfully"]);           
+                            }else {
+                                return response()->json(['response'=>true,'Message'=>"fournisseur name and telephone and adresse updated successfully"]);
+                            }  
+                    }    
+                }elseif ($fournisseur_info[0]->name == $request->name) {
+                            if ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
+                                        return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                            }elseif ((count($telephone_existe) != 0) && ($telephone_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
+                                        return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                            }else{
+                                    DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                            'email' => $request->email,
+                                                                                                                            'telephone' => $request->telephone,
+                                                                                                                            'adresse' => $request->adresse,
+                                                                                                                             ]);            
+                                   if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                        return response()->json(['response'=>true,'Message'=>"fournisseur email and telephone updated successfully"]);           
+                                    }else {
+                                        return response()->json(['response'=>true,'Message'=>"fournisseur email and telephone and adresse updated successfully"]);
+                                    }  
+                            }    
+                }elseif ($fournisseur_info[0]->telephone == $request->telephone) {
+                            if ((count($name_existe) != 0) && ($name_existe[0]->name != $fournisseur_info[0]->name)) {
+                                        return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                            }elseif ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
+                                        return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                            }else{
+                                    DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
+                                                                                                                            'name' => $request->name,
+                                                                                                                            'email' => $request->telephone,
+                                                                                                                            'adresse' => $request->adresse,
+                                                                                                                             ]);
+
+                                   if ($fournisseur_info[0]->adresse == $request->adresse) {
+                                        return response()->json(['response'=>true,'Message'=>"fournisseur name and email updated successfully"]);           
+                                    }else {
+                                        return response()->json(['response'=>true,'Message'=>"fournisseur name and email and adresse updated successfully"]);
+                                    }
+                            }  
+                }
+        }else{
+                return response()->json(['response'=>false,'Message'=>"The Info u entered already existe"]);
+        }
+    }
+
+
+
+    public function Produit_Existence($Reference)
+    {
+
+            $produit_existe = DB::table('produit')->where('Reference',$Reference)->get();
+                if (strlen($Reference) < 8) {
+                    return response()->json(['response'=>false,'Message'=>"Reference length is less than 8 carracters"]);
+                }elseif (strlen($Reference) > 8) {
+                    return response()->json(['response'=>false,'Message'=>"Reference length is gratter than 8 carracters"]);
+                }
+                if ((count($produit_existe) != 0)) {
+                    return response()->json(['response'=>false,'Message'=>"Reference already existe"]);
+                }else{
+                    return response()->json(['response'=>true,'Message'=>"go ahead"]);
+                }    
+    }
+
+    public function insertNewProduit(Request $request)
+    {
+
+         DB::table('produit')->insert(
+                                    [   
+                                        'reference' => $request->reference,
+                                        'designation' => $request->designation,
+                                        'code_categorie' => $request->code_categorie,
+                                        'prix_unitaire' => $request->prix_unitaire,
+                                        'quantite' => $request->quantite,
+                                        'code_fournisseur' => $request->code_fournisseur,
+                                    ]
+                                    );
+                    return response()->json("The product inserted successfully");
+    }
+
+
+    public function get_Produit_info($Code_produit)
+    {
+
+        $product_info = DB::table('produit')->whereCode_produit($Code_produit)->get();
+        return response()->json($product_info);
+    }
+
+    public function update_Produit(Request $request)
+    {
+
+        if (strlen($request->refference) < 8) {
+            return response()->json(['response'=>false,'Message'=>"Reference length is less than 8 carracters"]);
+        }elseif (strlen($request->refference) > 8) {
+            return response()->json(['response'=>false,'Message'=>"Reference length is gratter than 8 carracters"]);
+        }    
+
+        $Refferance_existe = DB::table('produit')->whereReference($request->refference)->get();
+        $product_info = DB::table('produit')->whereCode_produit($request->code_produit)->get();
+
+        if (($product_info[0]->Reference == $request->refference) 
+        &&  ($product_info[0]->designation == $request->designation)
+        &&  ($product_info[0]->prix_unitaire == $request->prix_unitaire)
+        &&  ($product_info[0]->code_fournisseur == $request->code_fournisseur)
+        &&  ($product_info[0]->code_categorie == $request->code_categorie)
+        &&  ($product_info[0]->quantite == $request->quantite)) 
+            {
+                return response()->json(['response'=>true,'Message'=>"Nothing To Update !! ^_^"]); 
+            }
+        if ((count($Refferance_existe) == 0) ) {
+
+                   
+
+                DB::table('produit')->where('code_produit',$request->code_produit)->update([
+                                                                                            'reference' => $request->reference,
+                                                                                            'designation' => $request->designation,
+                                                                                            'prix_unitaire' => $request->prix_unitaire,
+                                                                                            'quantite' => $request->quantite,
+                                                                                            'code_categorie' => $request->code_categorie,
+                                                                                            'code_fournisseur' => $request->code_fournisseur,
+                                                                                            ]);
+                
+                    return response()->json(['response'=>true,'Message'=>"product info updated successfully"]);
+                }elseif ((count($Refferance_existe) != 0) && $product_info[0]->Reference == $request->refference) {
+                DB::table('produit')->where('code_produit',$request->code_produit)->update([
+                                                                                            'designation' => $request->designation,
+                                                                                            'prix_unitaire' => $request->prix_unitaire,
+                                                                                            'quantite' => $request->quantite,
+                                                                                            'code_categorie' => $request->code_categorie,
+                                                                                            'code_fournisseur' => $request->code_fournisseur,
+                                                                                            ]);
+                    return response()->json(['response'=>true,'Message'=>"product info updated successfully"]);
+                
+
+        }else{
+
+                return response()->json(['response'=>false,'Message'=>"The product refferance u entered already existe"]);
+        }
+    }
+
+
+    public function cmnd_approval($numero_cmnd)
+    {
+        try {
+                $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$numero_cmnd)->get();
+                if (!(is_null($cmnd[0]->id_admin))) {
+                   return response()->json(['response'=>false,'approved'=>true,'Message'=>"this commande already approved by an admin"]); 
+                }
+                $insufisant_products = array();
+                $quantites_cmnd = DB::table('concerne')->select('qte_cmnd')->where('numero_cmnd',$numero_cmnd)->get();
+                $quantites = DB::table('concerne')->select('quantite')
+                                                    ->join('produit','produit.code_produit','=','concerne.code_produit')
+                                                    ->where('numero_cmnd',$numero_cmnd)
+                                                    ->get(); 
+                $products_names = DB::table('concerne')->select('designation')
+                                                    ->join('produit','produit.code_produit','=','concerne.code_produit')
+                                                    ->where('numero_cmnd',$numero_cmnd)
+                                                    ->get();                                                                                              
+
+                for ($i=0; $i < count($quantites_cmnd); $i++) { 
+                 
+                    if (($quantites[$i]->quantite - $quantites_cmnd[$i]->qte_cmnd) < 0) {
+                       $insufisant_products[count($insufisant_products)] = $products_names[$i]->designation;
+                    }
+                }
+                    if (count($insufisant_products)!=0) {
+                        return response()->json(['response'=>false,'approved'=>false,'products'=>$insufisant_products]);
+                    }else{
+                        return response()->json(['response'=>true]);                                                
+                    }
+        } catch (Exception $e) {return response()->json(['response'=>false,'Message'=> $e.getMessage()]); }
+            
+      
+     
+               
+
+    }
+
+               
+    public function cmnd_approved(Request $request)
+    {
+        try {
+            $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$request->numero_cmnd)->get();
+            if (!(is_null($cmnd[0]->id_admin))) {
+               return response()->json(['response'=>false,'approved'=>true,'Message'=>"this commande already approved by an admin"]); 
+            }
+            $quantites_cmnd = DB::table('concerne')->select('code_produit','qte_cmnd')->where('numero_cmnd',$request->numero_cmnd)->orderByRaw('code_produit ASC')->get();
+            $quantites = DB::table('concerne')->select('quantite')
+                                                ->join('produit','produit.code_produit','=','concerne.code_produit')
+                                                ->where('numero_cmnd',$request->numero_cmnd)
+                                                ->orderByRaw('concerne.code_produit ASC')
+                                                ->get(); 
+            $qte_rests = array();                                                
+            for ($i=0; $i < count($quantites_cmnd); $i++) 
+            {
+                DB::table('produit')->where('code_produit',$quantites_cmnd[$i]->code_produit)->update(['quantite' => $quantites[$i]->quantite-$quantites_cmnd[$i]->qte_cmnd]);
+            }  
+                DB::table('commande')->where('numero_cmnd',$request->numero_cmnd)->update(['id_etat' => 1,'id_admin'=> $request->id_admin]);   
+
+        } catch (Exception $e) {
+
+            return response()->json(['response'=>false,'Message'=> $e.getMessage()]); 
+        }
+
+            return response()->json(['response'=>true,'approved'=>true,'Message'=>"the commande is approuved successfully"]); 
+                                    
+
+    }    
+
+
+
+
+    public function commandes_filter($annee,$etat)  
+    {
+        $periods = array(); 
+        if (($annee != "Tout")&&($etat != "Tout")) {
+            $commandes = DB::select('SELECT * FROM commande JOIN users ON users.id=commande.id_client WHERE YEAR(date_effectue)='.$annee.' AND id_etat='.$etat.' ORDER BY date_effectue DESC');
+            for ($i=0; $i < count($commandes); $i++) {
+                $periods[count($periods)]=Carbon::now()->subDays(Carbon::parse($commandes[$i]->date_effectue)->diffInDays(Carbon::now()))->diffForHumans();
+            }            
+        }elseif (($annee == "Tout")&&($etat != "Tout")) {
+            $commandes = DB::table('commande')->whereId_etat($etat)->join('users','users.id','=','commande.id_client')->orderByRaw('date_effectue DESC')->get();
+            for ($i=0; $i < count($commandes); $i++) {
+                $periods[count($periods)]=Carbon::now()->subDays(Carbon::parse($commandes[$i]->date_effectue)->diffInDays(Carbon::now()))->diffForHumans();
+            }
+        }elseif (($annee != "Tout")&&($etat == "Tout")) {
+            $commandes = DB::select('SELECT * FROM commande JOIN users ON users.id=commande.id_client WHERE YEAR(date_effectue)='.$annee.' ORDER BY date_effectue DESC');
+            for ($i=0; $i < count($commandes); $i++) {
+                $periods[count($periods)]=Carbon::now()->subDays(Carbon::parse($commandes[$i]->date_effectue)->diffInDays(Carbon::now()))->diffForHumans();
+            }            
+        }else{
+            $commandes = DB::table('commande')->join('users','users.id','=','commande.id_client')->orderByRaw('date_effectue DESC')->get();
+            for ($i=0; $i < count($commandes); $i++) {
+                $periods[count($periods)]=Carbon::now()->subDays(Carbon::parse($commandes[$i]->date_effectue)->diffInDays(Carbon::now()))->diffForHumans();
+            }        
+        }
+        return response()->json(['commandes'=>$commandes ,'periods'=>$periods]);
+    }  
+
+
+
+    public function statistics($top10year,$top)  
+    {
+        if ($top == 'FOURNISSEURS') {
+            if ($top10year == 'Tout') {
+                $resualt = DB::select('SELECT name,sum(concerne.qte_cmnd * produit.prix_unitaire) prix
+                                            from concerne
+                                            inner join produit
+                                            on produit.code_produit = concerne.code_produit
+                                            inner join fournisseur 
+                                            on fournisseur.code_fournisseur=produit.code_fournisseur
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            AND commande.id_etat = 1
+                                            GROUP BY name
+                                            order by prix desc');
+            }else{
+                $resualt = DB::select('SELECT  name,sum(concerne.qte_cmnd * produit.prix_unitaire) prix
+                                            from concerne
+                                            inner join produit
+                                            on produit.code_produit = concerne.code_produit
+                                            inner join fournisseur 
+                                            on fournisseur.code_fournisseur=produit.code_fournisseur
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            where YEAR(commande.date_effectue) = '.$top10year.'
+                                            AND commande.id_etat = 1
+                                            GROUP BY name
+                                            order by prix desc');
+            }
+        }elseif ($top == 'CLIENTS') {
+            if ($top10year == 'Tout') {
+                $resualt = DB::select('SELECT name , email , sum(concerne.qte_cmnd) nbr_qty
+                                            from concerne
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            inner join users
+                                            on users.id = commande.id_client
+                                            AND commande.id_etat = 1
+                                            GROUP BY name,email
+                                            order by nbr_qty desc
+                                            ');               
+            }else{
+                $resualt = DB::select('SELECT name , email , sum(concerne.qte_cmnd) nbr_qty
+                                            from concerne
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            inner join users
+                                            on users.id = commande.id_client
+                                            where YEAR(commande.date_effectue) = '.$top10year.'
+                                            AND commande.id_etat = 1
+                                            GROUP BY name,email
+                                            order by nbr_qty desc
+                                            ');
+            }
+        }elseif ($top == 'PRODUITS') {
+            if ($top10year == 'Tout') {
+                $resualt = DB::select('SELECT designation , REFERENCE ,concerne.code_produit, SUM(concerne.qte_cmnd) qty_total
+                                            from concerne
+                                            inner join produit
+                                            on produit.code_produit = concerne.code_produit
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            where id_etat = 1
+                                            GROUP BY designation , REFERENCE ,concerne.code_produit 
+                                            order by qty_total desc
+                                            ');
+            }else{
+                $resualt = DB::select('SELECT designation , REFERENCE ,concerne.code_produit, SUM(concerne.qte_cmnd) qty_total
+                                            from concerne
+                                            inner join produit
+                                            on produit.code_produit = concerne.code_produit
+                                            inner join commande 
+                                            on commande.numero_cmnd = concerne.numero_cmnd
+                                            where YEAR(commande.date_effectue) = '.$top10year.'
+                                            AND id_etat = 1
+                                            GROUP BY designation , REFERENCE ,concerne.code_produit 
+                                            order by qty_total desc
+                                            ');
+            }
+        }elseif ($top == 'CATEGORIE') {
+            if ($top10year == 'Tout') {
+                $resualt = DB::select('SELECT libelle ,count(concerne.numero_cmnd) nbr_cmnd , sum(concerne.qte_cmnd) nbr_qte
+                                            from concerne 
+                                            inner join produit on produit.code_produit = concerne.code_produit
+                                            inner join categorie on categorie.code_categorie = produit.code_categorie
+                                            inner join commande on commande.numero_cmnd=concerne.numero_cmnd
+                                            group by libelle
+                                            order by nbr_qte desc
+                                            ');                
+            }else{
+                $resualt = DB::select('SELECT libelle ,count(concerne.numero_cmnd) nbr_cmnd , sum(concerne.qte_cmnd) nbr_qte
+                                            from concerne 
+                                            inner join produit on produit.code_produit = concerne.code_produit
+                                            inner join categorie on categorie.code_categorie = produit.code_categorie
+                                            inner join commande on commande.numero_cmnd=concerne.numero_cmnd
+                                            where YEAR(commande.date_effectue) = '.$top10year.'
+                                            group by libelle
+                                            order by nbr_qte desc
+                                            ');
+            }
+        }
+
+        return response()->json(['statistics_OF'=>$top,'statistics'=>$resualt]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

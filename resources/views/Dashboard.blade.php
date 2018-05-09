@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-
 <?php 
-use Carbon\Carbon ;
+use Carbon\Carbon;
 Carbon::setLocale('fr');
-?>
+ ?>
+
 <head>
    <script src="{{ asset('js/Dashboard.js') }}" defer></script>
+   
 </head>
 
 <div class="container-fluid">
@@ -22,6 +23,7 @@ Carbon::setLocale('fr');
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#fournisseurs">FOURNISSEURS <span class="badge badge-primary">{{count($fournisseurs)}}</span></a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#produit">PRODUCTS <span class="badge badge-primary">{{count($products)}}</span></a></li>  
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#commandes">COMMANDES <span class="badge badge-warning">{{count($commandes)}}</span></a></li>                                                      
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistics">STATISTICS</a></li>                                                      
                           </ul>
                 </div>
                 <div class="card-body no-padd">
@@ -34,37 +36,30 @@ Carbon::setLocale('fr');
                       <div class="tab-content">
                         <div id="clients" class="container-fluid tab-pane active no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                <div class="input-group col-md-9">
-                                  <input id="searche_client" type="text" class="form-control col-md-6"  placeholder="Recherche..." onkeyup="tables_serache('client')">
+                                <div class="input-group col-md-5">
+                                  <input id="searche_client" type="text" class="form-control col-md-12"  placeholder="Recherche..." onkeyup="tables_serache('client')">
                                 </div>
-                                <div class="btn-group btn-group- col-md-3" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-success col-md-12 ">AJOUTER</button>
+                                <div class="col-md-7" >
+                                    <button type="button" class="btn btn-success col-md-4 pull-right " onclick="display_add_user_form('client')">AJOUTER</button>
                                 </div>
                             </div>
                             <br>
                             <br>
-                            <table class="table table-striped table-responsive-sm table-bordered no-padd">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Name</th>
+                            <table class="table table-striped table-responsive-sm  no-padd">
+                                 <tbody id="clients_table" >
+                                    <tr class="thead-dark">
+                                        <th>Chef De Division</th>
                                         <th>Email</th>
-                                        <th>Role</th>
                                         <th></th>
-                                        
                                     </tr>
-                                </thead>
-                                <tbody id="clients_table" >
+                         
+                               
                                     @foreach($clients as $client)
                                     <tr>
                                         <td>{{ $client->name }}</td>
                                         <td>{{ $client->email }}</td>
-                                        @if($client->id_type == 1)
-                                        <td>Admin</td>
-                                        @else
-                                        <td>Client</td>
-                                        @endif
                                         <td>
-                                            <button type="button" class="btn btn-small btn-danger col-md-12 " onclick="deleteclient({{ $client->id }})">SUPPRIMER</button>                                            
+                                            <button type="button" class="btn btn-small btn-primary col-md-12 " onclick="display_update_user_form({{ $client->id }})">MODIFIER</button>                                            
                                        </td>
                                     </tr>
                                     @endforeach
@@ -72,51 +67,32 @@ Carbon::setLocale('fr');
                                </table>                          
                         </div>
                         <div id="admins" class="container-fluid tab-pane fade no-padd"><br>
-                                <div class="btn-group col-md-12 no-padd">
-                                    <div class="input-group col-md-6">
-                                      <input id="searche_admin" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('admin')">
-                                    
-                                    </div> 
-                                    <div class="btn-group col-md-6" >
-                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
-
-                                    </div> 
-                                </div> 
+                            <div class="btn-group col-md-12 no-padd">
+                                <div class="input-group col-md-5">
+                                  <input id="searche_admin" type="text" class="form-control col-md-12"  placeholder="Recherche..." onkeyup="tables_serache('admin')">
+                                </div>
+                                <div class="col-md-7">
+                                    <button type="button" class="btn btn-success col-md-4 pull-right " onclick="display_add_user_form('admin')">AJOUTER</button>
+                                </div>
+                            </div>
                             <br>
                             <br>                           
-                            <table class="table table-striped table-condensed table-responsive-sm table-bordered col-md-12 no-padd ">
-                                <thead>
+                            <table class="table table-striped  table-responsive-sm  col-md-12 no-padd ">
+                          <tbody id="admins_table">
                                     <tr class="thead-dark">
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Role</th>
                                         <th></th>
                                     </tr>
-                                </thead>
-                                <tbody id="admins_table">
+                    
+                              
                                     @foreach($admins as $admin)
                                     <tr>
                                         <td>{{ $admin->name }}</td>
                                         <td>{{ $admin->email }}</td>
-                                        @if($admin->id_type == 1)
-                                        <td>Admin</td>
-                                        @else
-                                        <td>Client</td>
-                                        @endif
                                         <td>
-                                            
-                                        <div class="btn-group">
-                                          <button type="button" class="btn btn-small btn-primary col-md-12" >MODIFIER</button>
-                                          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                          </button>
-                                          <ul class="dropdown-menu no-padd">
-                                            <li><button type="button" class="btn btn-small btn-danger col-md-12">SUPPRIMER</button></li>
-                                            </ul>
-                                        </div>
-                                                                                
-                                        </td>
+                                            <button type="button" class="btn btn-small btn-primary col-md-12 " onclick="display_update_user_form({{ $admin->id }})">MODIFIER</button>                                            
+                                       </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -124,34 +100,37 @@ Carbon::setLocale('fr');
                         </div>
                         <div id="fournisseurs" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                    <div class="input-group col-md-6">
-                                      <input id="searche_fournisseur" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('fournisseur')">
+                                    <div class="input-group col-md-5">
+                                      <input id="searche_fournisseur" type="text" class="form-control col-md-12"  placeholder="recherche..." onkeyup="tables_serache('fournisseur')">
                                       
                                     </div> 
-                                    <div class="btn-group col-md-6" >
-                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
-                                        <button type="button" class="btn btn-primary col-md-4">MODIFIER</button>
-                                        <button type="button" class="btn btn-danger col-md-4">SUPRIMMER</button>
+                                    <div class="col-md-7">
+
+                                        <button type="button" class="btn btn-success col-md-4 pull-right " onclick="display_fournisseur_form('add',0)">AJOUTER</button>
                                     </div> 
                                 </div> 
                             <br>
                             <br>                           
-                            <table class="table table-striped table-responsive-sm table-bordered col-md-12 no-padd" >
-                                <thead>
+                            <table class="table  table-responsive-sm table-striped col-md-12 no-padd" >
+                               <tbody id="fournisseurs_table">
                                     <tr class="thead-dark">
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>adresse</th>
                                         <th>Telephone</th>
+                                        <th></th>
                                     </tr>
-                                </thead>
-                                <tbody id="fournisseurs_table">
+                                
+                               
                                     @foreach($fournisseurs as $fournisseur)
                                     <tr>
                                         <td >{{ $fournisseur->name }}</td>
                                         <td >{{ $fournisseur->email }}</td>
                                         <td >{{ $fournisseur->adresse }}</td>
                                         <td >{{ $fournisseur->telephone }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-small btn-primary col-md-12 " onclick="display_fournisseur_form('update',{{ $fournisseur->code_fournisseur }})">MODIFIER</button>                                            
+                                       </td>                                        
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -159,20 +138,18 @@ Carbon::setLocale('fr');
                         </div>
                         <div id="produit" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                    <div class="input-group col-md-6">
-                                      <input id="searche_product" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('product')">
+                                    <div class="input-group col-md-5">
+                                      <input id="searche_product" type="text" class="form-control col-md-12"  placeholder="recherche..." onkeyup="tables_serache('product')">
                                       
                                     </div> 
-                                    <div class="btn-group col-md-6" >
-                                        <button type="button" class="btn btn-success col-md-4">AJOUTER</button>
-                                        <button type="button" class="btn btn-primary col-md-4">MODIFIER</button>
-                                        <button type="button" class="btn btn-danger col-md-4">SUPRIMMER</button>
+                                    <div class="col-md-7 " >
+                                        <button  type="button" class="btn btn-success col-md-4 pull-right " onclick="display_produit_form('add',0)">AJOUTER</button>
                                     </div> 
                                 </div> 
                             <br>
                             <br>                           
-                            <table class="table table-striped table-responsive-sm table-bordered col-md-12 no-padd" >
-                                <thead>
+                            <table class="table  table-responsive-sm  col-md-12 no-padd" >
+                                <tbody id="products_table">
                                     <tr class="thead-dark">
                                         <th>Refference</th>
                                         <th>Designation</th>
@@ -180,53 +157,140 @@ Carbon::setLocale('fr');
                                         <th>Prix Unitaire</th>
                                         <th>Fourni par</th>
                                         <th>quantite</th>
+                                        <th></th>
                                     </tr>
-                                </thead>
-                                <tbody id="products_table">
+                            
+                                
                                     @foreach($products as $produit)
-                                    <tr>
-                                        <td >{{ $produit->Reference }}</td>
-                                        <td >{{ $produit->designation }}</td>
-                                        <td >{{ $produit->libelle }}</td>
-                                        <td >{{ $produit->prix_unitaire }}</td>
-                                        <td >{{ $produit->name }}</td>
-                                        <td >{{ $produit->quantite }}</td>
-                                    </tr>
+                                        @if($produit->quantite < 50)
+                                            <tr class="alert alert-danger">
+                                                <td >{{ $produit->Reference }}</td>
+                                                <td >{{ $produit->designation }}</td>
+                                                <td >{{ $produit->libelle }}</td>
+                                                <td >{{ $produit->prix_unitaire }}</td>
+                                                <td >{{ $produit->name }}</td>
+                                                <td >{{ $produit->quantite }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-small btn-primary col-md-12 " onclick="display_produit_form('update',{{ $produit->code_produit }})">MODIFIER</button>                                            
+                                               </td>                                         
+                                            </tr>
+                                        @else
+                                            <tr >
+                                                <td >{{ $produit->Reference }}</td>
+                                                <td >{{ $produit->designation }}</td>
+                                                <td >{{ $produit->libelle }}</td>
+                                                <td >{{ $produit->prix_unitaire }}</td>
+                                                <td >{{ $produit->name }}</td>
+                                                <td >{{ $produit->quantite }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-small btn-primary col-md-12 " onclick="display_produit_form('update',{{ $produit->code_produit }})">MODIFIER</button>                                            
+                                               </td>                                         
+                                            </tr>                                        
+                                        @endif
                                     @endforeach
                                 </tbody>
                                </table>
                         </div>
                         <div id="commandes" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
-                                    <div class="input-group col-md-6">
-                                      <input id="searche_commande" type="text" class="form-control "  placeholder="recherche..." onkeyup="tables_serache('commande')">
-                                      
+
+                                    <div class=" col-md-4 no-padd">
+                                        <b><label class="col-md-4 modal-label control-label pull-left ">Recherche : </label></b>
+                                      <input id="searche_commande" type="text" class="form-control col-md-8 pull-right"  placeholder="recherche..." onkeyup="tables_serache('commande')">
                                     </div> 
 
+                                    <div class=" col-md-4 no-padd">
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">Annee : </label></b>
+                                      <div class="col-md-8 pull-right no-padd">
+                                        <select class="form-control" id="annee"  > 
+                                            <option value="Tout">Tout</option>
+                                            @foreach($years as $year)
+                                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endforeach
+
+                                        </select>
+                                      </div>
+                                    </div> 
+
+                                    <div class=" col-md-4 no-leftpadd">
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">Etat : </label></b>
+                                      <div class="col-md-8 pull-right no-padd">
+                                        <select class="form-control" id="etat" >
+                                            <option value="Tout">Tout</option>
+                                            <option value="2">En attent</option>
+                                            <option value="1">confermer</option>
+                                            
+                                        </select>
+                                      </div>
+                                    </div>                                     
                                 </div> 
                             <br>
                             <br>                            
-                            <table class="table table-striped table-responsive-sm table-hover table-condensed table-bordered col-md-12 no-padd" >
-                                <thead>
+                            <table class="table table-striped table-responsive-sm table-condensed  col-md-12 no-padd" id="filtre_commandes">
+
+                                 <tbody id="commandes_table" >                                    
                                     <tr class="thead-dark">
                                         <th>N° Commande</th>
                                         <th>Client</th>
-                                        <th>Date effectue</th>
+                                        <th>Date</th>
+                                        <th>Periode</th>
                                         <th>Detaile</th>
                                     </tr>
-                                </thead>
-                                <tbody id="commandes_table" >
                                     @foreach($commandes as $commande)
                                     <tr>
                                         <td >{{ $commande->numero_cmnd }}</td>
                                         <td >{{ $commande->name }}</td>
-                                        <td >{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }} <!--{{$commande->date_effectue}}  --> </td>
+                                        <td >{{ $commande->date_effectue }}</td>
+                                        <td >{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}   </td>
                                         <td><button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
                                     </tr>
                                     @endforeach
-                                </tbody>
+                                </tbody> 
                            </table>
-                        </div>                        
+                        </div>
+
+
+                        <div id="statistics" class="container-fluid tab-pane fade no-padd"><br>
+                            <div class="btn-group col-md-12 no-padd">
+                                    <div class=" col-md-6 no-leftpadd">
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">TOP </label></b>
+                                      <div class="col-md-8 pull-right no-padd">
+                                        <select class="form-control" id="top10" >
+                                            <option value="FOURNISSEURS">FOURNISSEURS</option>
+                                            <option value="CLIENTS">CLIENTS</option>
+                                            <option value="PRODUITS">PRODUITS</option>
+                                            <option value="CATEGORIE">CATEGORIE</option>
+                                        </select>
+                                      </div>
+                                    </div> 
+
+                                    <div class=" col-md-6 no-padd">
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">FOR </label></b>
+                                      <div class="col-md-8 pull-right no-padd">
+                                        <select class="form-control" id="top10year"  > 
+                                            <option value="Tout">Tout</option>
+                                            @foreach($years as $year)
+                                            <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                            @endforeach
+
+                                        </select>
+                                      </div>
+                                    </div> 
+
+                                                                 
+                                </div> 
+                            <br>
+                            <br>                            
+                            <table class="table table-striped table-responsive-sm table-condensed  col-md-12 no-padd" id="statistics_table">
+                               
+                               
+                           </table>
+                        </div>
+
+                        </div>
+
+                            </div>
+                        </div>                                                
                       </div>
                 </div>
             </div>
@@ -238,51 +302,252 @@ Carbon::setLocale('fr');
 
 
     <div id="cmnd_dtls_modal" class="modal2">
+      <!-- Modal content -->
+        <div class="modal2-content" >
+            <div class="modal2-header">
+                <span class="close2">&times;</span>
+              <h2 id="cmnd_dtls_nbr">Detaile du commande N°: </h2>
+            </div>
+            <div class="modal2-body no-padd"><div class="col-md-12"><div class="col-md-12  alert alert-danger modal2" id="modal-alert"></div></div>
+                <div class="container-fluid no-padd">
+                    <div class="col-md-12 no-padd">
+                        
+                           <table class="table  table-responsive-sm col-md-12 no-margin " >
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th> REFFERENCE </th>
+                                        <th> DESIGNATION </th>
+                                        <th> CATEGORIE </th>
+                                        <th> PRIX UNIT </th>
+                                        <th> QUANTITE </th>
+                                        <th> PRIX TOTAL </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        
+                    </div>                    
+                    <div class="col-md-12 no-padd products-table">
+                        
+                           <table class="table  table-responsive-sm col-md-12 no-margin " id="cmnd_dtls_table"><tbody></tbody></table>
+
+                    </div>
+                    <div class="container-fluid no-padd">
+                            <table class="table table-striped  table-responsive-sm col-md-12 no-margin" >
+                                <thead class="thead-dark no-padd">
+                                    <tr >
+                                        <th class=""><h5 id="cmnd_dtls_date">DATE : </h5></th>
+                                        <th class=""><h5 id="cmnd_dtls_client">CLIENT : </h5></th>
+                                        <th class=""><h5 class="pull-right">PRIX TOTAL </h5></th>
+                                        <th><input id="cmnd_dtl_prix_total" class="pull-right fitt-in form-control col-md-12" type="number" name="cmnd_tprice" placeholder="" disabled="true"></th>
+                                    </tr>
+                                </thead>                  
+                            </table>   
+                        </div>
+                </div>
+            </div>
+            <div class="modal2-footer clearfix">
+                <div class="col-md-12">
+                    <button class="btn btn-warning col-md-2 pull-right my_btn_margin" id="approver" >Approver</button>
+                    <button class="btn btn-danger col-md-2 pull-right my_btn_margin" onclick="cancel()">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+<div id="ajouter" class="modal2">
 
   <!-- Modal content -->
-    <div class="modal2-content" >
+    <div class="modal2-content" id="small-model-content">
         <div class="modal2-header">
             <span class="close2">&times;</span>
-          <h2>Detaile</h2>
+          <h2 class="modal-title" id="modal-titel"></h2>
         </div>
-        <div class="modal2-body">
-            <div class="container no-padd">
-
-
-          <div class="col-md-12 no-padd">
-                   <table class="table table-striped table-responsive-sm col-md-10 " id="cmnd_dtls_table">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th> REFFERENCE </th>
-                            <th> DESIGNATION </th>
-                            <th> CATEGORIE </th>
-                            <th> PRIX UNIT </th>
-                            <th> QUANTITE </th>
-                            <th> PRIX TOTAL </th>
-                            
-                        </tr>
-                        </thead>
-                    </table>
-                    <div class="container-fluid no-padd">
-                    <table class="table table-striped table-responsive-sm col-md-12 " >
-                        <thead class="thead-dark no-padd">
-                        <tr>
-                            <th><h5><span id="cmnd_dtls_date" class="label label-danger">EFFECTUE LE : </span></h5></th>
-                            <th class="no-padd"><label  for="cmnd_prix_total" class="label label-danger pull-right">PRIX TOTAL DE LA COMMANDE :</label></th><th><input id="cmnd_dtl_prix_total" class="pull-right fitt-in form-control col-md-12" type="number" name="cmnd_tprice" placeholder="" disabled="true"></th>
-                        </tr>
-                        </thead>                  
-                   </table>   
-       </div>
-          </div>
-      </div>
+        <div class="input-group clearfix">
+            <div class="container-fluid no-padd">
+                <div class="col-md-12">
+                    <div class="form-horizontal container-fluid" >
+                        <div class="alert alert-danger modal2" id="modal-alert">
+                            not in here 
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Chef de Division</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="name" type="text" placeholder="chef de division" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Email de Division</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="email" type="Email" placeholder="Email de division" required>
+                          </div>
+                        </div>                        
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-password">Password</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="password" type="password" placeholder="Password" required>
+                          </div>
+                        </div>  
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Confirm password</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="repassword" type="password" placeholder="Confirm password" required>
+                          </div>
+                        </div>  
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <button class="btn btn-primary col-md-3 pull-right" id="valider" >Ajouter</button>
+                                <button class="btn btn-warning col-md-3 pull-right " onclick="cancel()">Fermer</button>
+                            </div>
+                          
+                        </div>                                                                                              
+                      </div>                  
+                </div>
+            </div>
         </div>
+        
 
-    <div class="modal2-footer">
-      
+    </div>
+
+</div>
+
+
+
+
+<div id="Fournisseur" class="modal2">
+
+  <!-- Modal content -->
+    <div class="modal2-content" id="small-model-content">
+        <div class="modal2-header">
+            <span class="close2">&times;</span>
+          <h2 class="modal-title" id="modal-titel"></h2>
+        </div>
+        <div class="input-group clearfix">
+            <div class="container-fluid no-padd">
+                <div class="col-md-12">
+                    <div class="form-horizontal container-fluid" >
+                        <div class="alert alert-danger modal2" id="modal-alert">
+                            not in here 
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Nom</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="F_name" type="text" placeholder="Nom de fournisseur" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Email</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="F_email" type="Email" placeholder="Email de fournisseur" required>
+                          </div>
+                        </div>                        
+                        <div class="form-group clearfix">
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-password">Adresse</label></b>
+                          <div class="col-md-8 pull-right">
+                            <textarea class="form-control" id="F_adresse" type="text" placeholder="Adresse de fournisseur" required ></textarea>
+                          </div>
+                        </div>  
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Telephone</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="F_telephone" type="text" placeholder="Telephone de fournisseur" required>
+                          </div>
+                        </div>  
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <button class="btn btn-primary col-md-4 pull-right" id="valider" >Ajouter</button>
+                                <button class="btn btn-danger col-md-3 pull-right " onclick="cancel()">Fermer</button>
+                            </div>
+                          
+                        </div>                                                                                              
+                      </div>                  
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+</div>
+
+
+<div id="Produit" class="modal2">
+  <!-- Modal content -->
+    <div class="modal2-content" id="small-model-content">
+        <div class="modal2-header">
+            <span class="close2">&times;</span>
+          <h2 class="modal-title" id="modal-titel"></h2>
+        </div>
+        <div class="input-group clearfix">
+            <div class="container-fluid no-padd">
+                <div class="col-md-12">
+                    <div class="form-horizontal container-fluid" >
+                        <div class="alert alert-danger modal2" id="modal-alert">
+                            not in here 
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Refferance</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="Reference" type="text" placeholder="Refferance" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Designation</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="Designation" type="text" placeholder="Designation" required>
+                          </div>
+                        </div>                        
+                        <div class="form-group clearfix">
+                          <b><label class="col-md-4 modal-label control-label pull-left ">categorie</label></b>
+                          <div class="col-md-8 pull-right">
+                            <select class="form-control" id="Categorie" required >
+                                @foreach($categories as $categorie)
+                                <option value="{{ $categorie->code_categorie }}">{{ $categorie->libelle }}</option>
+                                @endforeach
+                            </select>
+                          </div>
+                        </div>  
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Prix_unit">Prix unitaire</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="Prix_unit" type="number" min="1" placeholder="Prix unitaire" required>
+                          </div>
+                        </div>  
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " >Fourni par</label></b>
+                          <div class="col-md-8 pull-right">
+                            <select class="form-control" id="Fourni_par" type="text"  required>
+                                @foreach($fournisseurs as $fournisseur)
+                                <option value="{{ $fournisseur->code_fournisseur }}">{{ $fournisseur->name }}</option>
+                                @endforeach                                
+                            </select>
+                          </div>
+                        </div> 
+                        <div class="form-group ">
+                          <b><label class="col-md-4 modal-label control-label pull-left " >Quantité</label></b>
+                          <div class="col-md-8 pull-right">
+                            <input class="form-control" id="Quantite" type="number" min="1" placeholder="Quantité" required>
+                          </div>
+                        </div>                                                 
+                        <div class="form-group">
+                            <div class="col-md-12 ">
+                                <button class="btn btn-primary col-md-4 pull-right" id="valider" >Ajouter</button>
+                                <button class="btn btn-danger col-md-3 pull-right " onclick="cancel()">Fermer</button>
+                            </div>
+                          
+                        </div>                                                                                              
+                      </div>                  
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 
 
 
