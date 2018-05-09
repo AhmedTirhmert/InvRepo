@@ -20,10 +20,10 @@ class ProduitTableSeeder extends Seeder
     				
     				'reference'=>$faker->ean8,
     				'code_categorie'=>$faker->numberBetween(1,4),
-                    'code_utilisateur'=>$faker->numberBetween(1,50),
+                    'code_fournisseur'=>$faker->numberBetween(1,50),
     				'designation'=>$faker->text($maxNbChars = 20),
     				'prix_unitaire'=>$faker->randomFloat(),
-    				
+    				'quantite'=>$faker->numberBetween(0,200),
     				]
     			);
     		}   
