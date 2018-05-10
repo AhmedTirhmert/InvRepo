@@ -1,10 +1,4 @@
-/*
 
-Edming Admin Template
-EGrappler.com
-All Rights Reserved.
-
-*/
 
 body {
 	font-size: 13px;
@@ -343,7 +337,8 @@ box-shadow: none;
 }
 .btn {
 	font-size: 13px;
-	font-weight: 600
+	font-weight: 600;
+	margin: 2px 2px;
 }
 .btn.btn-mini, .btn.btn-small {
 	font-size: 11px
@@ -906,7 +901,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 	overflow: hidden
 }
 .widget-menu a {
-	color: #555;
+	color: #000;
 	display: block;
 	line-height: 20px;
 	padding: 15px;
@@ -943,7 +938,7 @@ transition: all .2s ease-in-out;
 
 }
 .widget-menu>li>a {
-	background-color: #2d2b32;
+	background-color: #1a162a;
 	color: rgba(250,250,250,0.89);
 	-webkit-transition: all .2s ease-in-out;
 -moz-transition: all .2s ease-in-out;
@@ -962,8 +957,8 @@ transition: all .2s ease-in-out;
 	display: block
 }
 .widget-menu>li>a:hover {
-	background-color: #28262c;
-	color: #fafafa;
+	background-color: #dbdadd;
+	color: #000;
 }
 
 .widget-menu>li>a:hover .menu-icon { color:#fff;}
@@ -1728,7 +1723,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 2%; /* Location of the box */
+    padding-top: 0%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -1747,7 +1742,8 @@ form {
     position: relative;
     background-color: #fff;
     margin: auto;
-    margin-top: 2%;
+    margin-top: 1.7%;
+    margin-bottom: 1.7%;
     padding: 0;
     border: 1px solid #888;
     width: 96%;
@@ -1769,8 +1765,15 @@ form {
 
 
 .modal2-body {
-	padding: 2px 16px;
+	padding: 10px 16px;
+	max-height: 30rem;
+	
 }
+.modal2-body .alert { max-height: 6rem; overflow-y: scroll; }
+.modal2-body .col-md-12 .container-fluid { height: 30rem; overflow-y: scroll; }
+.products-table { max-height: 23rem;overflow-y: scroll; }
+.modal2-content .input-group {margin-bottom: 15px}
+textarea { min-height: 5.5rem }
 
 
 .modal2-footer {
@@ -1826,7 +1829,16 @@ form {
 
 }
 .no-padd {padding: 0px;}
+.no-leftpadd {padding-left: 0px;}
+.no-rightpadd {padding-right: 0px;}
+.no-toppadd {padding-top: 0px;}
+.no-bottompadd {padding-bottom: 0px;}
+
 .no-margin {margin: 0px;}
+.no-leftmargin {margin-left: 0px;}
+.no-rightmargin {margin-right: 0px;}
+.no-topmargin {margin-top: 0px;}
+.no-bottommargin {margin-bottom: 0px;}
 .cmnd-total{
     padding-bottom: 5px;
     padding-top: 5px;
@@ -1845,3 +1857,14 @@ form {
     height: 230px;
     
 }
+.modal-label{
+	margin-top: 8px;
+	text-decoration: italic ;
+}
+.my_btn_margin{
+	margin: 2px
+}
+.statistics-cards{max-height: 20rem; margin-bottom: 10px}
+.statistics-cards .card-body{overflow-y: auto}
+.collapsed ul {list-style-type:none}
+.my-nav {padding-left: 0;margin-bottom: 0;list-style-type: none}

@@ -11,12 +11,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', '') }}</title>
-    <link type="text/css" href="bootstrap/css/theme.css" rel="stylesheet">
+    <!-- <link type="text/css" href="bootstrap/css/theme.css" rel="stylesheet"> -->
     
 <!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
+
 
 
     <!-- Fonts -->
@@ -24,7 +24,6 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css"> -->
     <link href="{{ URL::asset('/css/my_css.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('/css/app.css') }}" rel="stylesheet" type="text/css" > 
 </head>
@@ -49,8 +48,8 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                            <li><a class="nav-link" href="{{ route('login') }}" hidden>{{ __('Login') }}</a></li>
+                            <li><a class="nav-link" href="{{ route('register') }}" hidden>{{ __('Register') }}</a></li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -61,7 +60,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Log Out') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

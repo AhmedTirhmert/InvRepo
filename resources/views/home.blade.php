@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+<?php 
+use Carbon\Carbon ;
+Carbon::setLocale('fr');
+?>
 @section('content')
 <head>
        <script src="{{ asset('js/Home.js') }}" defer></script>
@@ -20,13 +24,13 @@
                     @endif
 
 
-                   <table class="table  table-hover table-striped table-responsive-sm col-md-12" id="table_commandes">
+                   <table class="table  table-hover table-bordered table-striped table-responsive-sm col-md-12 no-padd" id="table_commandes">
                         <thead class="thead-dark">
                         <tr>
                             <th>N° Commande</th>
-                            <th>Effectué Le</th>
+                            <th>Periode</th>
                             <th>Etat de commande</th>
-                            <th>Par : </th>
+                            <th >Par : </th>
                             <th></th>
                         </tr>
                         </thead>
@@ -38,9 +42,9 @@
                         @endif  
                          
                             <td>{{$commande->numero_cmnd}}</td>
-                            <td>{{$commande->date_effectue}}</td>
+                            <td>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</td>
                             <td >{{$commande->etat}} </td>
-                            <td >{{$commande->name}}</td>
+                            <td >{{$commande->name}} (<small>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</small>)</td>
                             <td><button class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
                         </tr>
                         @endforeach
@@ -54,12 +58,12 @@
 <div id="myModal" class="modal2">
 
   <!-- Modal content -->
-    <div class="modal2-content" >
+    <div class="modal2-content clearfix" >
         <div class="modal2-header">
             <span class="close2">&times;</span>
           <h2 class="no-margin">Nouvelle Commande</h2>
         </div>
-        <div class="modal2-body">
+        <div class="modal2-body ">
             <div class="container-fluid no-padd">
                 <div class="col-md-12 alert alert-border no-padd" style="padding: 0">
                     <form class="col-md-12 form-inline no-padd" >
@@ -75,17 +79,17 @@
                             @endforeach
                         </select>                        
                        
-                        <input id="prix_unitaire"   class="fitt-in form-control col-md-2" type="number" name="qty" placeholder="prix_unitaire" disabled="true">
-                        <input id="qty"             class="fitt-in form-control col-md-2" type="number" name="qty" placeholder="Quantité" min="1">
-                        <input id="prix_total"      class="fitt-in form-control col-md-2" type="number" name="qty" placeholder="prix" disabled="true">
-                        <input id="ajouter"         class="fitt-in form-control btn btn-small btn-success col-md-1 pull-right" type="button" name="ajouter_produit" value="Ajouter">
+                        <input id="prix_unitaire"   class="fitt-in form-control col-md-2" type="number" placeholder="prix_unitaire" disabled="true">
+                        <input id="qty"             class="fitt-in form-control col-md-2" type="number" placeholder="Quantité" min="1">
+                        <input id="prix_total"      class="fitt-in form-control col-md-2" type="number" placeholder="prix" disabled="true">
+                        <input id="ajouter"         class="fitt-in form-control btn btn-small btn-success col-md-1 pull-right no-margin" type="button" name="ajouter_produit" value="Ajouter">
                     </form>
           </div>
           <div class="alert alert-danger modal2" id="alert_fill">
               Entrer une quantité valide :!
           </div>
           <div class="col-md-12 no-padd">
-                   <table class="table table-striped table-responsive-sm col-md-12 " id="new_cmnd_products_table">
+                   <table class="table table-striped table-responsive-sm col-md-12 no-padd" id="new_cmnd_products_table">
                         <thead class="thead-dark">
                         <tr>
                             <th> Produit </th>
@@ -96,7 +100,7 @@
                         </tr>
                         </thead>
                     </table>
-                        <table class="table table-striped table-responsive-sm col-md-12 " >
+                        <table class="table table-striped table-responsive-sm col-md-12 no-margin no-padd" >
                         <thead class="thead-dark no-padd">
                         <tr>
                             <th></th>
@@ -111,12 +115,10 @@
       </div>
         </div>
 
-    <div class="modal2-footer">
-        <div class="col-md-12">
-            <div class="col-md-4" >
-            <button  class="btn btn-large btn-danger " id="btn-close">Annulé</button>
-            <button  class="btn btn-large btn-primary " name="effectue" id="effectue"  type="submit" >effectué</button>
-            </div> 
+    <div class="modal2-footer clearfix">
+        <div class="col-md-12 no-padd">
+            <button  class="btn btn-large btn-primary col-md-2 pull-right" id="effectue"  >effectué</button>
+            <button  class="btn btn-large btn-danger col-md-2 pull-right" id="btn-close">Annulé</button>
           </div>
         </div>
     </div>
@@ -134,12 +136,12 @@
             <span class="close2">&times;</span>
           <h2 class="no-margin" id="cmnd_dtls_header">Commande N°=</h2>
         </div>
-        <div class="modal2-body">
+        <div class="modal2-body ">
             <div class="container-fluid no-padd alert alert-border">
 
 
           <div class="col-md-12 no-padd">
-                   <table class="table table-striped table-responsive-sm col-md-12 " id="cmnd_dtls_table">
+                   <table class="table table-striped table-responsive-sm col-md-12 no-padd" id="cmnd_dtls_table">
                         <thead class="thead-dark">
                         <tr>
                             <th> REFFERENCE </th>
@@ -152,7 +154,7 @@
                         </tr>
                         </thead>
                     </table>
-                        <table class="table table-striped table-responsive-sm col-md-12 no-margin" >
+                        <table class="table table-striped table-responsive-sm col-md-12 no-margin no-padd" >
                         <thead class="thead-dark no-padd">
                         <tr>
                             <th><h5><span id="cmnd_dtls_date" class="label label-danger">EFFECTUE LE : </span></h5></th>
