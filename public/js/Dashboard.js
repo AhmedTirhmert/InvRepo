@@ -311,10 +311,11 @@ function get_user_info(id_user)
        	url: '/users/get_user_info/'+id_user,
        	type: 'GET',
        	success:function(result){
+			   console.log(result)
 			$("#ajouter #name").val(result[0].name);
 			$("#ajouter #email").val(result[0].email);       		
        	},
-       	error:function(result){}
+       	error:function(result){console.log(result)}
 	});
 }
 
