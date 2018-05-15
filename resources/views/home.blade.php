@@ -12,7 +12,7 @@ Carbon::setLocale('fr');
     <div class="row justify-content-center">
         <div class="col-md-12" >
             <div class="card">
-                <div class="card-header">Votre Commandes
+                <div class="card-header">Vos Commandes
                 <button  class="btn btn-large btn-primary pull-right " id="popup">Nouvelle Commande </button>
                 </div>
 
@@ -45,7 +45,7 @@ Carbon::setLocale('fr');
                             <td>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</td>
                             <td >{{$commande->etat}} </td>
                             <td >{{$commande->name}} (<small>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</small>)</td>
-                            <td><button class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
+                            <td><button class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir les détails </button></td>
                         </tr>
                         @endforeach
                    </table>
@@ -117,8 +117,8 @@ Carbon::setLocale('fr');
 
     <div class="modal2-footer clearfix">
         <div class="col-md-12 no-padd">
-            <button  class="btn btn-large btn-primary col-md-2 pull-right" id="effectue"  >effectué</button>
-            <button  class="btn btn-large btn-danger col-md-2 pull-right" id="btn-close">Annulé</button>
+            <button  class="btn btn-large btn-primary col-md-2 pull-right" id="effectue"  >Effectuer</button>
+            <button  class="btn btn-large btn-danger col-md-2 pull-right" id="btn-close">Annuler</button>
           </div>
         </div>
     </div>
@@ -144,7 +144,7 @@ Carbon::setLocale('fr');
                    <table class="table table-striped table-responsive-sm col-md-12 no-padd" id="cmnd_dtls_table">
                         <thead class="thead-dark">
                         <tr>
-                            <th> REFFERENCE </th>
+                            <th> REFERENCE </th>
                             <th> DESIGNATION </th>
                             <th> CATEGORIE </th>
                             <th> PRIX UNIT </th>

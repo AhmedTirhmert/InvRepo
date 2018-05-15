@@ -64,11 +64,11 @@ class TestController extends Controller
 
 
             if ((count($name_existe) != 0)) {
-                return response()->json(['response'=>false,'Message'=>"name already existe"]);
+                return response()->json(['response'=>false,'Message'=>"nom déjà existe"]);
             }elseif (count($email_existe) != 0) {
-                return response()->json(['response'=>false,'Message'=>"email already existe"]);
+                return response()->json(['response'=>false,'Message'=>"email déjà existe"]);
             }else{
-                return response()->json(['response'=>true,'Message'=>"go ahead"]);
+                return response()->json(['response'=>true,'Message'=>"continue"]);
             }
     }
 
@@ -97,7 +97,7 @@ class TestController extends Controller
                                                             'id_type' => 2, 
                                                         ]
                                                         );
-                    return response()->json("The Client inserted successfully");
+                    return response()->json("La personne a été inséré avec succès");
         }else{
              DB::table('users')->insert(
                                             [   'name' => $name,
@@ -106,7 +106,7 @@ class TestController extends Controller
                                                 'id_type' => 1,
                                             ]
                                             );
-                    return response()->json("The admin inserted successfully");
+                    return response()->json("L'admin a été inséré avec succès");
         }
     }
 
@@ -123,19 +123,19 @@ class TestController extends Controller
                                                                         'email' => $request->email,
                                                                         'password' => Hash::make($request->password),
                                                                         ]);
-                return response()->json(['response'=>true,'Message'=>"user info updated successfully"]);
+                return response()->json(['response'=>true,'Message'=>"user info modifié avec succès"]);
 
         }elseif (($user_info[0]->email == $request->email) || ($user_info[0]->name == $request->name)) {
                 if ($user_info[0]->email == $request->email) {
                     if ((count($name_existe) != 0) && ($name_existe[0]->name != $user_info[0]->name)) {
-                        return response()->json(['response'=>false,'Message'=>"user name u entered already existe"]);
+                        return response()->json(['response'=>false,'Message'=>"le nom d'utilisateur que vous avez entré déjà existe"]);
                     }else{
                         DB::table('users')->where('id',$request->id)->update(['password' => Hash::make($request->password),'name'=>$request->name]);
-                        return response()->json(['response'=>true,'Message'=>"user info updated successfully"]);
+                        return response()->json(['response'=>true,'Message'=>"user info modifié avec succès"]);
                     }    
                 }elseif ($user_info[0]->name == $request->name) {
                     if ((count($email_existe) != 0) && ($email_existe[0]->email != $user_info[0]->email)) {
-                        return response()->json(['response'=>false,'Message'=>"user email u entered already existe"]);
+                        return response()->json(['response'=>false,'Message'=>"l'email d'utilisateur que vous avez entré déjà existe"]);
                     }else{
                         DB::table('users')->where('id',$request->id)->update(['password' => Hash::make($request->password),'email'=>$request->email]);  
                         return response()->json(['response'=>true,'Message'=>"user infos successfully"]);
@@ -146,7 +146,7 @@ class TestController extends Controller
                 }
         }else{
 
-                return response()->json(['response'=>false,'Message'=>"The Info u entered already existe"]);
+                return response()->json(['response'=>false,'Message'=>"Ces Infos que vous avez entré déjà existe"]);
         }
     }
 
@@ -160,13 +160,13 @@ class TestController extends Controller
 
 
             if ((count($name_existe) != 0)) {
-                return response()->json(['response'=>false,'Message'=>"name already existe"]);
+                return response()->json(['response'=>false,'Message'=>"nom déjà existe"]);
             }elseif (count($email_existe) != 0) {
-                return response()->json(['response'=>false,'Message'=>"email already existe"]);
+                return response()->json(['response'=>false,'Message'=>"email déjà existe"]);
             }elseif (count($telephone_existe) != 0) {
-                return response()->json(['response'=>false,'Message'=>"telephone already existe"]);
+                return response()->json(['response'=>false,'Message'=>"telephone déjà existe"]);
             }else{
-                return response()->json(['response'=>true,'Message'=>"go ahead"]);
+                return response()->json(['response'=>true,'Message'=>"continue"]);
             }
 
                   
@@ -183,7 +183,7 @@ class TestController extends Controller
                                         'adresse' => $request->adresse,
                                     ]
                                     );
-                    return response()->json("The Fournisseur inserted successfully");
+                    return response()->json("Ce fournisseur a été inséré avec succès");
 
     }
 
@@ -213,22 +213,22 @@ class TestController extends Controller
                                                                                                         'adresse' => $request->adresse,
                                                                                                         ]);
                             if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur data (name email telephone) updated successfully"]);           
+                                return response()->json(['response'=>true,'Message'=>"fournisseur data (nom email telephone) modifié avec succès"]);           
                             }else {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur data (name email telephone adresse) updated successfully"]);
+                                return response()->json(['response'=>true,'Message'=>"fournisseur data (nom email telephone adresse) modifié avec succès"]);
                             }
         }elseif (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->name == $request->name) && ($fournisseur_info[0]->telephone == $request->telephone)){
                             if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"Nothing To Update !! ^_^"]);         
+                                return response()->json(['response'=>true,'Message'=>"Rien a modifié !! ^_^"]);         
                             }else {
                                 DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update(['adresse' => $request->adresse]);  
-                                return response()->json(['response'=>true,'Message'=>"fournisseur adresse updated successfully"]);                              
+                                return response()->json(['response'=>true,'Message'=>"L'adresse a été modifié avec succès "]);                              
                             }                                
         }elseif (($fournisseur_info[0]->email == $request->email) || ($fournisseur_info[0]->name == $request->name) || ($fournisseur_info[0]->telephone == $request->telephone)) {
 
                 if (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->name == $request->name)) {
                     if ((count($telephone_existe) != 0) && ($name_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
-                            return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                            return response()->json(['response'=>false,'Message'=>"Le télephone que vous avez entré déjà existe"]);
                     }else{
                             DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                     'telephone' => $request->telephone,
@@ -236,14 +236,14 @@ class TestController extends Controller
                                                                                                                          ]);
 
                             if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur phone updated successfully"]);           
+                                return response()->json(['response'=>true,'Message'=>"Le télephone a été modifié avec succès"]);           
                             }else {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur telephone and adresse updated successfully"]);
+                                return response()->json(['response'=>true,'Message'=>"Le télephone et l'adresse du fournisseur aont été modifié avec succès"]);
                             }                     
                     }
                 }elseif (($fournisseur_info[0]->name == $request->name) && ($fournisseur_info[0]->telephone == $request->telephone)) {
                     if ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
-                            return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                            return response()->json(['response'=>false,'Message'=>"L'email que vous avez entré déjà existe"]);
                     }else{
                             DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                     'email' => $request->email,
@@ -251,30 +251,30 @@ class TestController extends Controller
                                                                                                                          ]);
 
                            if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur email updated successfully"]);           
+                                return response()->json(['response'=>true,'Message'=>"L'email du fournisseur a été modifié avec succès"]);           
                             }else {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur email and adresse updated successfully"]);
+                                return response()->json(['response'=>true,'Message'=>"L'email et l'adresse ont été modifié avec succès"]);
                             }                       
                     }               
                 }elseif (($fournisseur_info[0]->email == $request->email) && ($fournisseur_info[0]->telephone == $request->telephone)) {
                     if ((count($name_existe) != 0) && ($email_existe[0]->name != $fournisseur_info[0]->name)) {
-                            return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                            return response()->json(['response'=>false,'Message'=>"Le nom que vous avez entré déjà existe "]);
                     }else{
                             DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                     'name' => $request->name,
                                                                                                                     'adresse' => $request->adresse,
                                                                                                                          ]);
                             if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur name updated successfully"]);           
+                                return response()->json(['response'=>true,'Message'=>"Le nom est modifé avec succès "]);           
                             }else {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur name and adresse updated successfully"]);
+                                return response()->json(['response'=>true,'Message'=>"Le nom et l'adresse sont modifié avec succès"]);
                             }
                     }                     
                 }elseif ($fournisseur_info[0]->email == $request->email) {
                     if ((count($name_existe) != 0) && ($name_existe[0]->name != $fournisseur_info[0]->name)) {
-                                return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                                return response()->json(['response'=>false,'Message'=>"Le nom du fournisseur que vous avez entré est déjà existe"]);
                     }elseif ((count($telephone_existe) != 0) && ($name_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
-                                return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                                return response()->json(['response'=>false,'Message'=>"Le télephone que vous avez entré est déjà existe"]);
                     }else{
                             DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                     'name' => $request->name,
@@ -284,16 +284,16 @@ class TestController extends Controller
 
 
                            if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur name and telephone updated successfully"]);           
+                                return response()->json(['response'=>true,'Message'=>"Le nom et le télephone sont modifié avec succès"]);           
                             }else {
-                                return response()->json(['response'=>true,'Message'=>"fournisseur name and telephone and adresse updated successfully"]);
+                                return response()->json(['response'=>true,'Message'=>"Le nom et télephone et l'adresse sont modifié avec succès"]);
                             }  
                     }    
                 }elseif ($fournisseur_info[0]->name == $request->name) {
                             if ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
-                                        return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                                        return response()->json(['response'=>false,'Message'=>"L'email que vous avez entré est déjà existe"]);
                             }elseif ((count($telephone_existe) != 0) && ($telephone_existe[0]->telephone != $fournisseur_info[0]->telephone)) {
-                                        return response()->json(['response'=>false,'Message'=>"fournisseur phone u entered already existe"]);
+                                        return response()->json(['response'=>false,'Message'=>"Le télephonel que vous avez entré est déjà existe"]);
                             }else{
                                     DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                             'email' => $request->email,
@@ -301,16 +301,16 @@ class TestController extends Controller
                                                                                                                             'adresse' => $request->adresse,
                                                                                                                              ]);            
                                    if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                        return response()->json(['response'=>true,'Message'=>"fournisseur email and telephone updated successfully"]);           
+                                        return response()->json(['response'=>true,'Message'=>"L'email et le télephone sont modifié avec succès"]);           
                                     }else {
-                                        return response()->json(['response'=>true,'Message'=>"fournisseur email and telephone and adresse updated successfully"]);
+                                        return response()->json(['response'=>true,'Message'=>"L'email,télephone et adresse sont modifié avec succès"]);
                                     }  
                             }    
                 }elseif ($fournisseur_info[0]->telephone == $request->telephone) {
                             if ((count($name_existe) != 0) && ($name_existe[0]->name != $fournisseur_info[0]->name)) {
-                                        return response()->json(['response'=>false,'Message'=>"fournisseur name u entered already existe"]);
+                                        return response()->json(['response'=>false,'Message'=>"Le nom que vous avez entré est déjà existe"]);
                             }elseif ((count($email_existe) != 0) && ($email_existe[0]->email != $fournisseur_info[0]->email)) {
-                                        return response()->json(['response'=>false,'Message'=>"fournisseur email u entered already existe"]);
+                                        return response()->json(['response'=>false,'Message'=>"L'email que vous avez entré est déjà existe"]);
                             }else{
                                     DB::table('fournisseur')->where('Code_fournisseur',$request->Code_fournisseur)->update([
                                                                                                                             'name' => $request->name,
@@ -319,14 +319,14 @@ class TestController extends Controller
                                                                                                                              ]);
 
                                    if ($fournisseur_info[0]->adresse == $request->adresse) {
-                                        return response()->json(['response'=>true,'Message'=>"fournisseur name and email updated successfully"]);           
+                                        return response()->json(['response'=>true,'Message'=>"Le nom et l'email du fournisseur sont modifié avec succès "]);           
                                     }else {
-                                        return response()->json(['response'=>true,'Message'=>"fournisseur name and email and adresse updated successfully"]);
+                                        return response()->json(['response'=>true,'Message'=>"Le nom,l'email et l'adresse du fournisseur sont modifié avec succès"]);
                                     }
                             }  
                 }
         }else{
-                return response()->json(['response'=>false,'Message'=>"The Info u entered already existe"]);
+                return response()->json(['response'=>false,'Message'=>"Ces infos que vous avez entré sont déjà existe"]);
         }
     }
 
@@ -337,14 +337,14 @@ class TestController extends Controller
 
             $produit_existe = DB::table('produit')->where('Reference',$Reference)->get();
                 if (strlen($Reference) < 8) {
-                    return response()->json(['response'=>false,'Message'=>"Reference length is less than 8 carracters"]);
+                    return response()->json(['response'=>false,'Message'=>"La longueur de référence est inférieure à 8 caractères"]);
                 }elseif (strlen($Reference) > 8) {
-                    return response()->json(['response'=>false,'Message'=>"Reference length is gratter than 8 carracters"]);
+                    return response()->json(['response'=>false,'Message'=>"La longueur de référence est supérieure à 8 caractères"]);
                 }
                 if ((count($produit_existe) != 0)) {
-                    return response()->json(['response'=>false,'Message'=>"Reference already existe"]);
+                    return response()->json(['response'=>false,'Message'=>"Référence déjà existe"]);
                 }else{
-                    return response()->json(['response'=>true,'Message'=>"go ahead"]);
+                    return response()->json(['response'=>true,'Message'=>"Continue"]);
                 }    
     }
 
@@ -361,7 +361,7 @@ class TestController extends Controller
                                         'code_fournisseur' => $request->code_fournisseur,
                                     ]
                                     );
-                    return response()->json("The product inserted successfully");
+                    return response()->json("Ce produit est inséré avec succès");
     }
 
 
@@ -376,9 +376,9 @@ class TestController extends Controller
     {
 
         if (strlen($request->refference) < 8) {
-            return response()->json(['response'=>false,'Message'=>"Reference length is less than 8 carracters"]);
+            return response()->json(['response'=>false,'Message'=>"La longueur de référence est inférieure à 8 caractères"]);
         }elseif (strlen($request->refference) > 8) {
-            return response()->json(['response'=>false,'Message'=>"Reference length is gratter than 8 carracters"]);
+            return response()->json(['response'=>false,'Message'=>"La longueur de référence est supérieure à 8 caractères"]);
         }    
 
         $Refferance_existe = DB::table('produit')->whereReference($request->refference)->get();
@@ -391,7 +391,7 @@ class TestController extends Controller
         &&  ($product_info[0]->code_categorie == $request->code_categorie)
         &&  ($product_info[0]->quantite == $request->quantite)) 
             {
-                return response()->json(['response'=>true,'Message'=>"Nothing To Update !! ^_^"]); 
+                return response()->json(['response'=>true,'Message'=>"Rien a modifié !! ^_^"]); 
             }
         if ((count($Refferance_existe) == 0) ) {
 
@@ -415,12 +415,12 @@ class TestController extends Controller
                                                                                             'code_categorie' => $request->code_categorie,
                                                                                             'code_fournisseur' => $request->code_fournisseur,
                                                                                             ]);
-                    return response()->json(['response'=>true,'Message'=>"product info updated successfully"]);
+                    return response()->json(['response'=>true,'Message'=>"Produit modifié avec succès "]);
                 
 
         }else{
 
-                return response()->json(['response'=>false,'Message'=>"The product refferance u entered already existe"]);
+                return response()->json(['response'=>false,'Message'=>"La référence que vous avez entré est déjà existe"]);
         }
     }
 
@@ -430,7 +430,7 @@ class TestController extends Controller
         try {
                 $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$numero_cmnd)->get();
                 if (!(is_null($cmnd[0]->id_admin))) {
-                   return response()->json(['response'=>false,'approved'=>true,'Message'=>"this commande already approved by an admin"]); 
+                   return response()->json(['response'=>false,'approved'=>true,'Message'=>"Cette commande est déjà approuvé par un admin"]); 
                 }
                 $insufisant_products = array();
                 $quantites_cmnd = DB::table('concerne')->select('qte_cmnd')->where('numero_cmnd',$numero_cmnd)->get();
@@ -468,7 +468,7 @@ class TestController extends Controller
         try {
             $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$request->numero_cmnd)->get();
             if (!(is_null($cmnd[0]->id_admin))) {
-               return response()->json(['response'=>false,'approved'=>true,'Message'=>"this commande already approved by an admin"]); 
+               return response()->json(['response'=>false,'approved'=>true,'Message'=>"Cette commande est déjà approuvé par un admin"]); 
             }
             $quantites_cmnd = DB::table('concerne')->select('code_produit','qte_cmnd')->where('numero_cmnd',$request->numero_cmnd)->orderByRaw('code_produit ASC')->get();
             $quantites = DB::table('concerne')->select('quantite')
@@ -488,7 +488,7 @@ class TestController extends Controller
             return response()->json(['response'=>false,'Message'=> $e.getMessage()]); 
         }
 
-            return response()->json(['response'=>true,'approved'=>true,'Message'=>"the commande is approuved successfully"]); 
+            return response()->json(['response'=>true,'approved'=>true,'Message'=>"Cette commande est approuvé avec succès"]); 
                                     
 
     }    

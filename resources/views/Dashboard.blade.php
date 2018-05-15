@@ -18,12 +18,12 @@ Carbon::setLocale('fr');
                 <div class="card-header no-padd">
                             <!-- Nav tabs -->
                           <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#clients">CLIENTS <span class="badge badge-large badge-primary">{{count($clients)}}</span></a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#clients">CHEFS DES DVs <span class="badge badge-large badge-primary">{{count($clients)}}</span></a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#admins">ADMINS <span class="badge badge-primary">{{count($admins)}}</span></a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#fournisseurs">FOURNISSEURS <span class="badge badge-primary">{{count($fournisseurs)}}</span></a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#produit">PRODUCTS <span class="badge badge-primary">{{count($products)}}</span></a></li>  
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#produit">PRODUITS <span class="badge badge-primary">{{count($products)}}</span></a></li>  
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#commandes">COMMANDES <span class="badge badge-warning">{{count($commandes)}}</span></a></li>                                                      
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistics">STATISTICS</a></li>                                                      
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistics">STATISTIQUES</a></li>                                                      
                           </ul>
                 </div>
                 <div class="card-body no-padd">
@@ -80,7 +80,7 @@ Carbon::setLocale('fr');
                             <table class="table table-striped  table-responsive-sm  col-md-12 no-padd ">
                           <tbody id="admins_table">
                                     <tr class="thead-dark">
-                                        <th>Name</th>
+                                        <th>Nom</th>
                                         <th>Email</th>
                                         <th></th>
                                     </tr>
@@ -114,7 +114,7 @@ Carbon::setLocale('fr');
                             <table class="table  table-responsive-sm table-striped col-md-12 no-padd" >
                                <tbody id="fournisseurs_table">
                                     <tr class="thead-dark">
-                                        <th>Name</th>
+                                        <th>Nom</th>
                                         <th>Email</th>
                                         <th>adresse</th>
                                         <th>Telephone</th>
@@ -151,12 +151,12 @@ Carbon::setLocale('fr');
                             <table class="table  table-responsive-sm  col-md-12 no-padd" >
                                 <tbody id="products_table">
                                     <tr class="thead-dark">
-                                        <th>Refference</th>
+                                        <th>Référence</th>
                                         <th>Designation</th>
-                                        <th>Categorie</th>
+                                        <th>Catégorie</th>
                                         <th>Prix Unitaire</th>
-                                        <th>Fourni par</th>
-                                        <th>quantite</th>
+                                        <th>Fournie par</th>
+                                        <th>Quantité</th>
                                         <th></th>
                                     </tr>
                             
@@ -200,7 +200,7 @@ Carbon::setLocale('fr');
                                     </div> 
 
                                     <div class=" col-md-4 no-padd">
-                                      <b><label class="col-md-4 modal-label control-label pull-left ">Annee : </label></b>
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">Année : </label></b>
                                       <div class="col-md-8 pull-right no-padd">
                                         <select class="form-control" id="annee"  > 
                                             <option value="Tout">Tout</option>
@@ -217,8 +217,8 @@ Carbon::setLocale('fr');
                                       <div class="col-md-8 pull-right no-padd">
                                         <select class="form-control" id="etat" >
                                             <option value="Tout">Tout</option>
-                                            <option value="2">En attent</option>
-                                            <option value="1">confermer</option>
+                                            <option value="2">En attente</option>
+                                            <option value="1">Confirmer</option>
                                             
                                         </select>
                                       </div>
@@ -230,11 +230,11 @@ Carbon::setLocale('fr');
 
                                  <tbody id="commandes_table" >                                    
                                     <tr class="thead-dark">
-                                        <th>N° Commande</th>
-                                        <th>Client</th>
+                                        <th>N° de Commande</th>
+                                        <th>Chef de Dv</th>
                                         <th>Date</th>
-                                        <th>Periode</th>
-                                        <th>Detaile</th>
+                                        <th>Période</th>
+                                        <th>Détails</th>
                                     </tr>
                                     @foreach($commandes as $commande)
                                     <tr>
@@ -242,7 +242,7 @@ Carbon::setLocale('fr');
                                         <td >{{ $commande->name }}</td>
                                         <td >{{ $commande->date_effectue }}</td>
                                         <td >{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}   </td>
-                                        <td><button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir detaile </button></td>
+                                        <td><button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir les détails </button></td>
                                     </tr>
                                     @endforeach
                                 </tbody> 
@@ -253,11 +253,11 @@ Carbon::setLocale('fr');
                         <div id="statistics" class="container-fluid tab-pane fade no-padd"><br>
                             <div class="btn-group col-md-12 no-padd">
                                     <div class=" col-md-6 no-leftpadd">
-                                      <b><label class="col-md-4 modal-label control-label pull-left ">TOP </label></b>
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">HAUT </label></b>
                                       <div class="col-md-8 pull-right no-padd">
                                         <select class="form-control" id="top10" >
                                             <option value="FOURNISSEURS">FOURNISSEURS</option>
-                                            <option value="CLIENTS">CLIENTS</option>
+                                            <option value="CLIENTS">CHEFS DES DVs</option>
                                             <option value="PRODUITS">PRODUITS</option>
                                             <option value="CATEGORIE">CATEGORIE</option>
                                         </select>
@@ -265,7 +265,7 @@ Carbon::setLocale('fr');
                                     </div> 
 
                                     <div class=" col-md-6 no-padd">
-                                      <b><label class="col-md-4 modal-label control-label pull-left ">FOR </label></b>
+                                      <b><label class="col-md-4 modal-label control-label pull-left ">POUR </label></b>
                                       <div class="col-md-8 pull-right no-padd">
                                         <select class="form-control" id="top10year"  > 
                                             <option value="Tout">Tout</option>
@@ -306,7 +306,7 @@ Carbon::setLocale('fr');
         <div class="modal2-content" >
             <div class="modal2-header">
                 <span class="close2">&times;</span>
-              <h2 id="cmnd_dtls_nbr">Detaile du commande N°: </h2>
+              <h2 id="cmnd_dtls_nbr">Détails du commande N°: </h2>
             </div>
             <div class="modal2-body no-padd"><div class="col-md-12"><div class="col-md-12  alert alert-danger modal2" id="modal-alert"></div></div>
                 <div class="container-fluid no-padd">
@@ -315,7 +315,7 @@ Carbon::setLocale('fr');
                            <table class="table  table-responsive-sm col-md-12 no-margin " >
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th> REFFERENCE </th>
+                                        <th> REFERENCE </th>
                                         <th> DESIGNATION </th>
                                         <th> CATEGORIE </th>
                                         <th> PRIX UNIT </th>
@@ -336,7 +336,7 @@ Carbon::setLocale('fr');
                                 <thead class="thead-dark no-padd">
                                     <tr >
                                         <th class=""><h5 id="cmnd_dtls_date">DATE : </h5></th>
-                                        <th class=""><h5 id="cmnd_dtls_client">CLIENT : </h5></th>
+                                        <th class=""><h5 id="cmnd_dtls_client">CHEF DE DV : </h5></th>
                                         <th class=""><h5 class="pull-right">PRIX TOTAL </h5></th>
                                         <th><input id="cmnd_dtl_prix_total" class="pull-right fitt-in form-control col-md-12" type="number" name="cmnd_tprice" placeholder="" disabled="true"></th>
                                     </tr>
@@ -347,7 +347,7 @@ Carbon::setLocale('fr');
             </div>
             <div class="modal2-footer clearfix">
                 <div class="col-md-12">
-                    <button class="btn btn-warning col-md-2 pull-right my_btn_margin" id="approver" >Approver</button>
+                    <button class="btn btn-warning col-md-2 pull-right my_btn_margin" id="approver" >Approuver</button>
                     <button class="btn btn-danger col-md-2 pull-right my_btn_margin" onclick="cancel()">Fermer</button>
                 </div>
             </div>
@@ -395,9 +395,9 @@ Carbon::setLocale('fr');
                           </div>
                         </div>  
                         <div class="form-group ">
-                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Confirm password</label></b>
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Confirmer password</label></b>
                           <div class="col-md-8 pull-right">
-                            <input class="form-control" id="repassword" type="password" placeholder="Confirm password" required>
+                            <input class="form-control" id="repassword" type="password" placeholder="Confirmer password" required>
                           </div>
                         </div>  
                         <div class="form-group">
@@ -454,7 +454,7 @@ Carbon::setLocale('fr');
                           </div>
                         </div>  
                         <div class="form-group ">
-                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Telephone</label></b>
+                          <b><label class="col-md-4 modal-label control-label pull-left " id="label-Repassword">Télephone</label></b>
                           <div class="col-md-8 pull-right">
                             <input class="form-control" id="F_telephone" type="text" placeholder="Telephone de fournisseur" required>
                           </div>
@@ -492,9 +492,9 @@ Carbon::setLocale('fr');
                             not in here 
                         </div>
                         <div class="form-group">
-                          <b><label class="col-md-4 modal-label control-label pull-left ">Refferance</label></b>
+                          <b><label class="col-md-4 modal-label control-label pull-left ">Référence</label></b>
                           <div class="col-md-8 pull-right">
-                            <input class="form-control" id="Reference" type="text" placeholder="Refferance" required>
+                            <input class="form-control" id="Reference" type="text" placeholder="Référance" required>
                           </div>
                         </div>
                         <div class="form-group">
@@ -504,7 +504,7 @@ Carbon::setLocale('fr');
                           </div>
                         </div>                        
                         <div class="form-group clearfix">
-                          <b><label class="col-md-4 modal-label control-label pull-left ">categorie</label></b>
+                          <b><label class="col-md-4 modal-label control-label pull-left ">catégorie</label></b>
                           <div class="col-md-8 pull-right">
                             <select class="form-control" id="Categorie" required >
                                 @foreach($categories as $categorie)
@@ -520,7 +520,7 @@ Carbon::setLocale('fr');
                           </div>
                         </div>  
                         <div class="form-group ">
-                          <b><label class="col-md-4 modal-label control-label pull-left " >Fourni par</label></b>
+                          <b><label class="col-md-4 modal-label control-label pull-left " >Fournie par</label></b>
                           <div class="col-md-8 pull-right">
                             <select class="form-control" id="Fourni_par" type="text"  required>
                                 @foreach($fournisseurs as $fournisseur)

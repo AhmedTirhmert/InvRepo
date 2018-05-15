@@ -251,7 +251,7 @@ function add_User(type)
 						            	error: function(result) {console.log(result)}
 						        		});				
 							}
-						}else{$("#ajouter #modal-alert").html("Fill all the fields!");$("#ajouter #modal-alert").removeClass('alert-success ');$("#ajouter #modal-alert").addClass('alert-danger');$("#ajouter #modal-alert").css('display','block');}
+						}else{$("#ajouter #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS");$("#ajouter #modal-alert").removeClass('alert-success ');$("#ajouter #modal-alert").addClass('alert-danger');$("#ajouter #modal-alert").css('display','block');}
 	});
 }
 
@@ -261,7 +261,7 @@ function Update_User(id_user)
 
    			if (($("#ajouter #password").val() != $("#ajouter #repassword").val()) || ($("#ajouter #repassword").val() == "") || ($("#ajouter #password").val() == "") || ($("#ajouter #name").val() == "") || ($("#email").val() == "")) 
 			{
-				$("#ajouter #modal-alert").html("Fill all the fields correctlly");
+				$("#ajouter #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS CORRECTEMENT");
 				$("#ajouter #modal-alert").removeClass('alert-success');
 				$("#ajouter #modal-alert").addClass('alert-danger');
 				$("#ajouter #modal-alert").css('display','block');
@@ -325,7 +325,7 @@ function display_update_user_form(id_user)
 		clear_dialoge_fields()
 		get_user_info(id_user);
 		$('#ajouter #valider').attr("onclick", "Update_User("+id_user+")");
-		$('#ajouter #valider').text("Update ");
+		$('#ajouter #valider').text("Modifier");
     		$('#ajouter #valider').removeClass('btn-success btn-danger')
     		$('#ajouter #valider').addClass('btn-primary')
 		$('#ajouter').css('display','block');
@@ -338,13 +338,13 @@ function display_add_user_form(type)
 		clear_dialoge_fields()
 		if (type == "admin") {
 			$('#ajouter #valider').attr("onclick", "add_User('"+type+"')");
-			$('#ajouter #valider').text("ADD "+type);
+			$('#ajouter #valider').text("Ajouter ");
 	    		$('#ajouter #valider').removeClass('btn-primary btn-danger')
 	    		$('#ajouter #valider').addClass('btn-success')
 	    		$("#ajouter #modal-alert").css('display','none');
 		}else{
 			$('#ajouter #valider').attr("onclick", "add_User('"+type+"')");
-			$('#ajouter #valider').text("ADD "+type);
+			$('#ajouter #valider').text("Ajouter ");
 	    		$('#ajouter #valider').removeClass('btn-primary btn-danger')
 	    		$('#ajouter #valider').addClass('btn-success')
 	    		$("#ajouter #modal-alert").css('display','none');
@@ -379,13 +379,13 @@ function display_fournisseur_form(operation,id_fournisseur)
 	clear_F_Fields()
 		if (operation == "add") {
 				$('#Fournisseur #valider').attr("onclick", "add_fournisseur()");
-				$('#Fournisseur #valider').text("ADD Fournisseur");
+				$('#Fournisseur #valider').text("Ajouter Fournisseur");
 		    		$('#Fournisseur #valider').removeClass('btn-primary btn-danger')
 		    		$('#Fournisseur #valider').addClass('btn-success')
 		    		$("#Fournisseur #modal-alert").css('display','none');			
 		}else{
 				get_fournisseur_info(id_fournisseur)
-				$('#Fournisseur #valider').text('Update Fournisseur');
+				$('#Fournisseur #valider').text('Modifier');
 				$('#Fournisseur #valider').attr("onclick", "update_fournisseur("+id_fournisseur+")");
 		    		$('#Fournisseur #valider').removeClass('btn-success btn-danger')
 		    		$('#Fournisseur #valider').addClass('btn-primary')
@@ -402,7 +402,7 @@ function add_fournisseur()
 	$(document).ready(function() {
 					if (($("#F_name").val() == "") || ($("#F_email").val() == "") || ($("#F_address").val() == "") || ($("#F_telephone").val() == "") )
 					{
-						$("#Fournisseur #modal-alert").html("FILL ALL THE INFORMATIONS");
+						$("#Fournisseur #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS");
 						$("#Fournisseur #modal-alert").css('display','block');
 					}else{
 						$("#modal-alert").css('display','none');
@@ -476,7 +476,7 @@ function update_fournisseur(id_fournisseur)
 
    			if (($("#F_name").val() == "") || ($("#F_email").val() == "") || ($("#F_address").val() == "") || ($("#F_telephone").val() == "") )
 				{
-					$("#Fournisseur #modal-alert").html("FILL ALL THE FOURNISSEUR INFORMATIONS");
+					$("#Fournisseur #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS");
 					$("#Fournisseur #modal-alert").removeClass('alert-danger alert-success');
 					$("#Fournisseur #modal-alert").addClass('alert-primary');
 					$("#Fournisseur #modal-alert").css('display','block');
@@ -523,7 +523,7 @@ function display_produit_form(operation,code_produit)
 	if (operation == "add") {
 			clear_P_Fields()
 			$('#Produit #valider').attr("onclick", "add_produit()");
-			$('#Produit #valider').text("Add");
+			$('#Produit #valider').text("Ajouter");
 			$('#Produit #valider').removeClass("btn-primary");
 			$('#Produit #valider').addClass("btn-success");
 			$("#Produit #modal-alert").css('display','none');
@@ -533,7 +533,7 @@ function display_produit_form(operation,code_produit)
 			clear_P_Fields()
 			get_produit_info(code_produit)
 			$('#Produit #valider').attr("onclick", "update_Produit("+code_produit+")");
-			$('#Produit #valider').text("Update");
+			$('#Produit #valider').text("Modifier");
 			$('#Produit #valider').removeClass("btn-success");
 			$('#Produit #valider').addClass("btn-primary");
 			$("#Produit #modal-alert").css('display','none');			
@@ -549,7 +549,7 @@ function add_produit()
 
 					if (($("#Reference").val() == "") || ($("#Designation").val() == "") || ($("#Prix_unit").val() == "") || ($("#Quantite").val() == "") || ($("#Quantite").val() < 0))
 					{
-						$("#Produit #modal-alert").html("FILL ALL THE INFORMATIONS");
+						$("#Produit #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS");
 						$("#Produit #modal-alert").removeClass('alert-danger alert-success');
 						$("#Produit #modal-alert").addClass('alert-primary');
 						$("#Produit #modal-alert").css('display','block');
@@ -633,7 +633,7 @@ function update_Produit(code_produit)
    		$(document).ready(function() {
    			if (($("#Reference").val() == "") || ($("#Designation").val() == "") || ($("#Prix_unit").val() == "") || ($("#Quantite").val() == "") )
 				{
-					$("#Produit #modal-alert").html("FILL ALL THE PRODUCT INFORMATIONS");
+					$("#Produit #modal-alert").html("REMPLISSEZ TOUS LES CHAMPS");
 					$("#Produit #modal-alert").removeClass('alert-danger alert-success');
 					$("#Produit #modal-alert").addClass('alert-primary');
 					$("#Produit #modal-alert").css('display','block');
@@ -767,7 +767,7 @@ function fill_filterd_commandes(filterd_commandes){
 			atrb1.innerHTML = filterd_commandes['commandes'][i].name;
 			atrb2.innerHTML = filterd_commandes['commandes'][i].date_effectue 
 			atrb3.innerHTML = filterd_commandes['periods'][i];
-			atrb4.innerHTML = '<button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det('+filterd_commandes['commandes'][i].numero_cmnd+')">Voir detaile </button>';
+			atrb4.innerHTML = '<button class="btn btn-small btn-dark col-md-12" onclick="cmnd_det('+filterd_commandes['commandes'][i].numero_cmnd+')">Voir les détails </button>';
 			$("#filtre_commandes ").addClass('table table-striped table-hover')
 			}
 }
@@ -808,7 +808,7 @@ function fill_staistics_table(statistics){
 						row =  statistics_table.insertRow(0);
 						atrb0 = row.insertCell(0);
 						atrb1 = row.insertCell(1);
-					 	atrb1.innerHTML = "NAME"
+					 	atrb1.innerHTML = "NOM"
 					 	atrb1.style.color = 'white'
 					 	atrb0.style.background ='white'
 						row.style.backgroundColor='black'	
@@ -828,7 +828,7 @@ function fill_staistics_table(statistics){
 						atrb1 = row.insertCell(1);
 						atrb2 = row.insertCell(2);
 						atrb3 = row.insertCell(3);
-					 	atrb1.innerHTML = "NAME"
+					 	atrb1.innerHTML = "NOM"
 						atrb2.innerHTML = "EMAIL"
 						atrb3.innerHTML = "QUANTITE COMMANDER"
 						atrb1.style.color = 'white'
@@ -857,9 +857,9 @@ function fill_staistics_table(statistics){
 						atrb1 = row.insertCell(1);
 						atrb2 = row.insertCell(2);
 						atrb3 = row.insertCell(3);
-					 	atrb1.innerHTML = "REFFERENCE"
+					 	atrb1.innerHTML = "REFERENCE"
 						atrb2.innerHTML = "DESIGNATION"
-						atrb3.innerHTML = "SELLED QUANTITY"
+						atrb3.innerHTML = "QUANTITÉ VENDUE"
 						atrb1.style.color = 'white'
 						atrb2.style.color = 'white'
 						atrb3.style.color = 'white'

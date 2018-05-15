@@ -89,7 +89,7 @@ btn_ajouter.onclick = function(){
 		price.innerHTML =  selected_product[selected_product.selectedIndex].value;
 		q_ty.innerHTML =  qty.value;
 		t_price.innerHTML =  prix_total.value;
-		btn_delete.innerHTML = '<button  class="id_btn btn btn-small btn-danger pull-right" onclick="deleteRow(this)" id="'+ selected_product_id[selected_product.selectedIndex].value +'" >Supprimé</button>'
+		btn_delete.innerHTML = '<button  class="id_btn btn btn-small btn-danger pull-right" onclick="deleteRow(this)" id="'+ selected_product_id[selected_product.selectedIndex].value +'" >Supprimer</button>'
 
 		var sum = 0;
 		for (var i = 1 ; i < new_cmnd_products_table.rows.length; i++) {
@@ -97,7 +97,7 @@ btn_ajouter.onclick = function(){
 		}
 		cmnd_prix_total.value=sum.toFixed(2);
 		qty.value="";
-		}else{$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');alert_fill.innerHTML="this product already added to this commande";alert_fill.style.display="block";}
+		}else{$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');alert_fill.innerHTML="Ce produit est déjà ajouté à cette commande";alert_fill.style.display="block";}
 
 }else{
 	

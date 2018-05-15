@@ -50,7 +50,7 @@ class HomeController extends Controller
             return response()->json('ERROR MESSAGE : ' .$e->getMessage());
         }
 
-        return response()->json("Your commande is done waitnig for the admin to approve it !"); 
+        return response()->json("Votre commande est terminée en attendant que l'administrateur l'approuver !"); 
    }
 
     public function cmnd_dtl($id){
