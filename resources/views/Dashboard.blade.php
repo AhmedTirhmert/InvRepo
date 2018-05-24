@@ -8,7 +8,9 @@ Carbon::setLocale('fr');
 
 <head>
    <script src="{{ asset('js/Dashboard.js') }}" defer></script>
-   
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+       <link href="{{ URL::asset('/css/dashboard.css') }}" rel="stylesheet" type="text/css" >
+
 </head>
 
 <div class="container-fluid">
@@ -276,15 +278,37 @@ Carbon::setLocale('fr');
                                         </select>
                                       </div>
                                     </div> 
-
-                                                                 
-                                </div> 
-                            <br>
-                            <br>                            
-                            <table class="table table-striped table-responsive-sm table-condensed  col-md-12 no-padd" id="statistics_table">
-                               
-                               
-                           </table>
+                                </div>    
+                                <br>
+                                <br>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="card col-md-12 no-padd">
+                                            <div class="card-header no-padd">
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li class="nav-item col-md-6 no-padd"><a class="nav-link" data-toggle="tab" href="#chart">CHART </a></li>
+                                                    <li class="nav-item col-md-6 no-padd"><a class="nav-link active" data-toggle="tab" href="#table">TABLE </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="tab-content">
+                                                    
+                                                
+                                                <div id="chart" class="container-fluid tab-pane fade no-padd">
+                                    <canvas id="mycharts" class="chartjs" height="100px"></canvas>
+                                </div>
+                              
+                            <div id="table" class="container-fluid tab-pane fade no-padd active">
+                                <table class="table table-striped table-responsive-sm table-condensed  col-md-6 no-padd" id="statistics_table">
+                                </table>
+                            </div> </div>
+                                            </div>
+                                        </div>
+                                
+                                    </div>
+                                </div>
+                                                 
+                           
                         </div>
 
                         </div>
@@ -309,10 +333,10 @@ Carbon::setLocale('fr');
               <h2 id="cmnd_dtls_nbr">Détails du commande N°: </h2>
             </div>
             <div class="modal2-body no-padd"><div class="col-md-12"><div class="col-md-12  alert alert-danger modal2" id="modal-alert"></div></div>
-                <div class="container-fluid no-padd">
-                    <div class="col-md-12 no-padd">
+                <div class="container-fluid no-padd cmnd_table">
+                    <div class="col-md-12 no-padd ">
                         
-                           <table class="table  table-responsive-sm col-md-12 no-margin " >
+                           <table class="table  table-responsive-sm col-md-12 no-margin "  id="cmnd_dtls_table">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th> REFERENCE </th>
@@ -323,12 +347,9 @@ Carbon::setLocale('fr');
                                         <th> PRIX TOTAL </th>
                                     </tr>
                                 </thead>
-                            </table>
+                           
                         
-                    </div>                    
-                    <div class="col-md-12 no-padd products-table">
-                        
-                           <table class="table  table-responsive-sm col-md-12 no-margin " id="cmnd_dtls_table"><tbody></tbody></table>
+                    </table>
 
                     </div>
                     <div class="container-fluid no-padd">
@@ -346,9 +367,20 @@ Carbon::setLocale('fr');
                 </div>
             </div>
             <div class="modal2-footer clearfix">
-                <div class="col-md-12">
-                    <button class="btn btn-warning col-md-2 pull-right my_btn_margin" id="approver" >Approuver</button>
-                    <button class="btn btn-danger col-md-2 pull-right my_btn_margin" onclick="cancel()">Fermer</button>
+                <div class="btn-group col-md-12  no-padd">
+                        <div class="col-md-8">
+                            <input  class="form-control col-md-12 my_btn_margin" type="text" placeholder="Tapez votre message a envoyé " id="message" >
+                            <div class="alert no-margin" id="alerto" style="padding-top:0.5rem;padding-bottom: 0.5rem "></div>
+                        </div>
+                    
+                    <div class="col-md-4 btn-group">
+                        
+                        <div class="col-md-6 "><button class="btn btn-danger   col-md-12 my_btn_margin" onclick="cancel()">Fermer</button></div>
+                        <div class="col-md-6 "><button class="btn btn-warning  col-md-12  my_btn_margin" id="approver" >Approuver</button></div>
+                            
+                        
+                    </div>
+                    
                 </div>
             </div>
         </div>

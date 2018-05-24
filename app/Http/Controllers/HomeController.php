@@ -55,14 +55,24 @@ class HomeController extends Controller
 
     public function cmnd_dtl($id){
 
-        $resp = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','quantite','date_effectue','name')
+        $products = DB::table('concerne')->select('Reference','designation','Libelle','prix_unitaire','qte_cmnd','quantite','date_effectue','name')
                                      ->join('produit','produit.code_produit','=','concerne.code_produit')
                                      ->join('categorie','produit.code_categorie','=','categorie.code_categorie')
                                      ->join('commande','commande.Numero_cmnd','=','concerne.Numero_cmnd')
                                      ->join('users','commande.id_client','=','users.id')
                                      ->where('commande.numero_cmnd',$id)
                                      ->get();
-        return response()->json($resp);
+
+        $infos = DB::table('commande')->select('name','Message','id_etat')
+                                     ->leftjoin('users','commande.id_admin','=','users.id')
+                                     ->where('commande.numero_cmnd',$id)
+                                     ->get();
+
+
+
+
+                                                                                                               
+        return response()->json(['products'=>$products,'infos'=>$infos]);
     
     }
 

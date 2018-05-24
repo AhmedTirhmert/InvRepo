@@ -11,7 +11,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', '') }}</title>
-    <!-- <link type="text/css" href="bootstrap/css/theme.css" rel="stylesheet"> -->
     
 <!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <!-- Scripts -->
@@ -24,8 +23,9 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ URL::asset('/css/my_css.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ URL::asset('/css/app.css') }}" rel="stylesheet" type="text/css" > 
+    <link href="{{ URL::asset('/css/my_css.css') }}" rel="stylesheet" type="text/css"> 
+    <link href="{{ URL::asset('/css/app.css') }}" rel="stylesheet" type="text/css" >
+    
 </head>
 <body>
     <div id="app">

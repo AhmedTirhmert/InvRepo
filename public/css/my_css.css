@@ -1769,9 +1769,11 @@ form {
 	max-height: 30rem;
 	
 }
-.modal2-body .alert { max-height: 6rem; overflow-y: scroll; }
+
+.modal2-body .alert-danger { max-height: 6rem; overflow-y: scroll; }
 .modal2-body .col-md-12 .container-fluid { height: 30rem; overflow-y: scroll; }
-.products-table { max-height: 23rem;overflow-y: scroll; }
+.products-table { max-height: 29rem;overflow-y: scroll; }
+.cmnd_table { max-height: 29rem;overflow-y: scroll; border-top: 1px solid rgba(0,0,0,0.5)}
 .modal2-content .input-group {margin-bottom: 15px}
 textarea { min-height: 5.5rem }
 
@@ -1868,3 +1870,44 @@ textarea { min-height: 5.5rem }
 .statistics-cards .card-body{overflow-y: auto}
 .collapsed ul {list-style-type:none}
 .my-nav {padding-left: 0;margin-bottom: 0;list-style-type: none}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*.modal2-body .alert-danger { max-height: 6rem; overflow-y: scroll; }
+.modal2-body .alert-border { max-height: 30rem; overflow-y: scroll; }
+.modal2-body .col-md-12 .container-fluid { height: 30rem; overflow-y: scroll; }
+.products-table { max-height: 23rem;overflow-y: scroll; }
+.modal2-content .input-group {margin-bottom: 15px}
+textarea { min-height: 5.5rem }
+
+.modal-label{
+	margin-top: 8px;
+	text-decoration: italic ;
+}
+.my_btn_margin{
+	margin: 2px
+}
+.statistics-cards{max-height: 20rem; margin-bottom: 10px}
+.statistics-cards .card-body{overflow-y: auto}
+.collapsed ul {list-style-type:none}
+.my-nav {padding-left: 0;margin-bottom: 0;list-style-type: none}*/

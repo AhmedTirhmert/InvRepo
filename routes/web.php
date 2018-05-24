@@ -26,6 +26,8 @@ Route::get('/commandes_filter/{annee}/{etat}', 'TestController@commandes_filter'
 	//POST
 Route::post('/commande/insertNewCommande', 'HomeController@insertNewCommande');
 Route::post('/commande/cmnd_approved', 'TestController@cmnd_approved');
+Route::post('/commande/send_message', 'TestController@send_message');
+Route::get('/commande/check_message/{id}', 'TestController@check_message');
 
 
 
@@ -60,3 +62,4 @@ Route::get('/Produits/get_Produit_info/{Code_Produit}', 'TestController@get_Prod
 
 //STATISTICS
 Route::get('/statistics/{top10year}/{top10}', 'TestController@statistics');
+

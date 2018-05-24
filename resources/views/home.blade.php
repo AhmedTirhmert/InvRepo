@@ -7,6 +7,8 @@ Carbon::setLocale('fr');
 @section('content')
 <head>
        <script src="{{ asset('js/Home.js') }}" defer></script>
+           <link href="{{ URL::asset('/css/home.css') }}" rel="stylesheet" type="text/css" >
+
 </head>
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -44,8 +46,13 @@ Carbon::setLocale('fr');
                             <td>{{$commande->numero_cmnd}}</td>
                             <td>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</td>
                             <td >{{$commande->etat}} </td>
-                            <td >{{$commande->name}} (<small>{{ Carbon::now()->subDays(Carbon::parse($commande->date_effectue)->diffInDays(Carbon::now()))->diffForHumans() }}</small>)</td>
-                            <td><button class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir les détails </button></td>
+                            @if($commande->id_etat == 2)
+                            <td >{{$commande->Message}} </td>
+                            @else
+                            <td >{{$commande->name}} </td>
+                            @endif
+                            
+                            <td><button style="width: 100%" class="btn btn-small btn-dark pull-right" onclick="cmnd_det({{$commande->numero_cmnd}})">Voir les détails </button></td>
                         </tr>
                         @endforeach
                    </table>
@@ -65,7 +72,7 @@ Carbon::setLocale('fr');
         </div>
         <div class="modal2-body ">
             <div class="container-fluid no-padd">
-                <div class="col-md-12 alert alert-border no-padd" style="padding: 0">
+                <div class="col-md-12 alert products-form no-padd" >
                     <form class="col-md-12 form-inline no-padd" >
 
                         <select value="select product" id="select_produit" class="form-control col-md-5">
@@ -88,7 +95,7 @@ Carbon::setLocale('fr');
           <div class="alert alert-danger modal2" id="alert_fill">
               Entrer une quantité valide :!
           </div>
-          <div class="col-md-12 no-padd">
+          <div class="col-md-12 no-padd products" id="cmnd">
                    <table class="table table-striped table-responsive-sm col-md-12 no-padd" id="new_cmnd_products_table">
                         <thead class="thead-dark">
                         <tr>
@@ -137,6 +144,7 @@ Carbon::setLocale('fr');
           <h2 class="no-margin" id="cmnd_dtls_header">Commande N°=</h2>
         </div>
         <div class="modal2-body ">
+            <div class="col-md-12"><div class="col-md-12  alert alert-warning modal2" id="modal-alert"></div></div>
             <div class="container-fluid no-padd alert alert-border">
 
 

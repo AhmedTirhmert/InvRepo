@@ -428,8 +428,8 @@ class TestController extends Controller
     public function cmnd_approval($numero_cmnd)
     {
         try {
-                $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$numero_cmnd)->get();
-                if (!(is_null($cmnd[0]->id_admin))) {
+                $cmnd = DB::table('commande')->select('id_admin','id_etat')->where('numero_cmnd',$numero_cmnd)->get();
+                if ((!(is_null($cmnd[0]->id_admin))) && ($cmnd[0]->id_etat == 1) )   {
                    return response()->json(['response'=>false,'approved'=>true,'Message'=>"Cette commande est déjà approuvé par un admin"]); 
                 }
                 $insufisant_products = array();
@@ -466,8 +466,8 @@ class TestController extends Controller
     public function cmnd_approved(Request $request)
     {
         try {
-            $cmnd = DB::table('commande')->select('id_admin')->where('numero_cmnd',$request->numero_cmnd)->get();
-            if (!(is_null($cmnd[0]->id_admin))) {
+            $cmnd = DB::table('commande')->select('id_admin','id_etat')->where('numero_cmnd',$request->numero_cmnd)->get();
+            if ((!(is_null($cmnd[0]->id_admin))) && ($cmnd[0]->id_etat == 1) ) {
                return response()->json(['response'=>false,'approved'=>true,'Message'=>"Cette commande est déjà approuvé par un admin"]); 
             }
             $quantites_cmnd = DB::table('concerne')->select('code_produit','qte_cmnd')->where('numero_cmnd',$request->numero_cmnd)->orderByRaw('code_produit ASC')->get();
@@ -529,7 +529,7 @@ class TestController extends Controller
     {
         if ($top == 'FOURNISSEURS') {
             if ($top10year == 'Tout') {
-                $resualt = DB::select('SELECT name,sum(concerne.qte_cmnd * produit.prix_unitaire) prix
+                $resualt = DB::select('SELECT name,sum(concerne.qte_cmnd) qty_total
                                             from concerne
                                             inner join produit
                                             on produit.code_produit = concerne.code_produit
@@ -539,9 +539,9 @@ class TestController extends Controller
                                             on commande.numero_cmnd = concerne.numero_cmnd
                                             AND commande.id_etat = 1
                                             GROUP BY name
-                                            order by prix desc');
+                                            order by qty_total desc');
             }else{
-                $resualt = DB::select('SELECT  name,sum(concerne.qte_cmnd * produit.prix_unitaire) prix
+                $resualt = DB::select('SELECT  name,sum(concerne.qte_cmnd) qty_total
                                             from concerne
                                             inner join produit
                                             on produit.code_produit = concerne.code_produit
@@ -552,7 +552,7 @@ class TestController extends Controller
                                             where YEAR(commande.date_effectue) = '.$top10year.'
                                             AND commande.id_etat = 1
                                             GROUP BY name
-                                            order by prix desc');
+                                            order by qty_total desc');
             }
         }elseif ($top == 'CLIENTS') {
             if ($top10year == 'Tout') {
@@ -632,8 +632,30 @@ class TestController extends Controller
 
 
 
+    public function send_message(Request $request)
+    {
+
+       
+
+         DB::table('commande')->where('numero_cmnd',$request->numero_cmnd)->update(['Message' => $request->message,'id_admin'=>$request->id_admin]);
+
+            return response()->json(['response'=>true,'message'=>"Votre message a été envoyé avec succès"]);
+
+        
+    }
 
 
+
+    public function check_message($numero_cmnd)
+    {
+        $first_check = DB::table('commande')->where('numero_cmnd',$numero_cmnd)->get();
+
+        if ($first_check[0]->Message != "") {
+            return response()->json(['response'=>false,'message'=>"déjà envoyé un message pour cette commande"]);
+        }else{
+            return response()->json(['response'=>true]);
+        }
+    }
 
 
 

@@ -1,0 +1,5 @@
+.modal2-body .alert-border { max-height: 28rem; overflow-y: scroll; }
+.modal2-body {max-height: 35rem;}
+.products { max-height: 25rem; overflow-y: scroll; border: 1px solid rgba(0,0,0,0.42);border-radius: 5px;padding: 2px }
+.products-form{ border: 1px solid rgba(0,0,0,0.42);border-radius: 5px;padding: 2px }
+.modal2-body .alert-danger {overflow-y: hidden; }

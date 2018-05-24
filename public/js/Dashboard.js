@@ -40,7 +40,7 @@ $(document).ready(function() {
 	               	url: '/cmnd_dtl/'+numero_cmnd,
 	               	type: 'GET',
 	               	success: function (data) {
-	                   		var locationsArray = data;
+	                   		var locationsArray = data['products'];
 	                   		add_records(locationsArray,numero_cmnd);
 	               	},
 	               	error: function(result){console.log(result)} 
@@ -49,12 +49,20 @@ $(document).ready(function() {
         	});
 
 	$('#cmnd_dtls_modal #approver').attr("onclick", "Approve_commande("+numero_cmnd+")");
+	$('#cmnd_dtls_modal #approver').html("Approuver");
+	$('#cmnd_dtls_modal #approver').addClass("btn-warning");
+	$('#cmnd_dtls_modal #approver').removeClass("btn-primary");
+	$('#cmnd_dtls_modal #message').css("display", "none");
+	$('#cmnd_dtls_modal #alerto').css("display", "none");
+	$('#cmnd_dtls_modal #alerto').css("height", "0");
 
 }
 
 function Approve_commande(numero_cmnd)
 {
 	$('#cmnd_dtls_modal #modal-alert').css('display','none');
+
+
 	$(document).ready(function() {
       	 $(function() {
            	$.ajax({
@@ -64,7 +72,7 @@ function Approve_commande(numero_cmnd)
 	               		console.log(result)
 	                   		if (result.response) {			
 	                   			$.ajax({
-	                   				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                   				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				               	url: '/commande/cmnd_approved',
 				               	type: 'POST',
 				               	data:{
@@ -82,7 +90,8 @@ function Approve_commande(numero_cmnd)
 			               				$('#cmnd_dtls_modal #modal-alert').html(result.Message);
 			               				$('#cmnd_dtls_modal #modal-alert').removeClass('alert-success');
 			               				$('#cmnd_dtls_modal #modal-alert').addClass('alert-danger');
-	                   						$('#cmnd_dtls_modal #modal-alert').css('display','block');				               			
+	                   					$('#cmnd_dtls_modal #modal-alert').css('display','block');	
+
 				               		}
 				               	},
 				               	error: function(result){console.log(result)} 
@@ -98,7 +107,51 @@ function Approve_commande(numero_cmnd)
 	               				$('#cmnd_dtls_modal #modal-alert').removeClass('alert-success');
 	                   			$('#cmnd_dtls_modal #modal-alert').html("La quantité des produits suivants est insufisant pour approuver cette commande : <br> - "+result.products.join("<br> - "));
 	                   			$('#cmnd_dtls_modal #modal-alert').css('display','block');
-	                   			$('.products-table').css('height','17rem')
+	                   			$('.cmnd_table').css('max-height','22rem')
+	                   			
+
+
+	                   			           	$.ajax({
+									               	url: '/commande/check_message/'+numero_cmnd,
+									               	type: 'GET',
+									               	success: function (result) {console.log(result)
+									               		if (result.response) {
+	               				                   			$('#cmnd_dtls_modal #message').css("display", "block");
+								                   			$('#cmnd_dtls_modal #message').css("width", "0");
+								                   			$("#cmnd_dtls_modal #message").animate({width: '100%'}, "slow");
+								                   			$('#cmnd_dtls_modal #approver').html("Envoyer");
+								                   			$('#cmnd_dtls_modal #approver').removeClass("btn-warning");
+								                   			$('#cmnd_dtls_modal #approver').addClass("btn-primary");
+								                   			$('#cmnd_dtls_modal #message').focus()
+								                   			
+								                   			$('#cmnd_dtls_modal #message').on('change',function(){
+							                   				if ($('#cmnd_dtls_modal #message').val() != 0) {
+							                   					$('#cmnd_dtls_modal #approver').attr("onclick", "send_message("+numero_cmnd+")");
+							                   					
+							                   				}else{
+							                   					$('#cmnd_dtls_modal #message').focus()
+							                   				};								                   				
+								                   			});
+
+									               		}else{
+									               			
+									               			$('#cmnd_dtls_modal #alerto').addClass("alert-danger");
+									               			$('#cmnd_dtls_modal #alerto').removeClass("alert-success");
+															$('#cmnd_dtls_modal #alerto').css("display", "block");
+															$('#cmnd_dtls_modal #alerto').css("height", "0px");
+															$('#cmnd_dtls_modal #alerto').css("width", "0px");
+															$("#cmnd_dtls_modal #alerto").animate({width: '100%',opacity:'1'}, "slow");
+															$("#cmnd_dtls_modal #alerto").animate({height: '100%',opacity:'1'}, "slow");
+															$('#cmnd_dtls_modal #alerto').html(result.message);
+									               		}
+									               	},
+									               	error: function(result) {console.log(result)}
+									               });
+
+
+
+
+	                   			
 	                   			}
 	                   		}
 	               	},
@@ -109,10 +162,55 @@ function Approve_commande(numero_cmnd)
 
 }
 
+function send_message(numero_cmnd){
+	var message = $('#cmnd_dtls_modal #message').val()
+	$('#cmnd_dtls_modal #message').val("")
+	console.log({'message':message,'nbr_cmnd':numero_cmnd}) ; 
+
+	$("#cmnd_dtls_modal #message").animate({width: '0px',opacity:'0'}, "slow");
+	$('#cmnd_dtls_modal #message').css("display", "none");
+
+	$(document).ready(function() {
+      	 $(function() {
+           	$.ajax({
+	               	url: '/commande/send_message',
+	               	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+	               	type: 'POST',
+	               	data: 	{'numero_cmnd':numero_cmnd,'message':message,'id_admin':Number($('#user_ID').html())},
+	               	success: function (result) {console.log(result)
+	               		if (result.response) {
+	               			$('#cmnd_dtls_modal #alerto').html(result.message);
+	               			$('#cmnd_dtls_modal #alerto').addClass("alert-success");
+							$('#cmnd_dtls_modal #alerto').css("display", "block");
+							$('#cmnd_dtls_modal #alerto').css("opacity", "0");
+							$("#cmnd_dtls_modal #alerto").animate({width: '100%',opacity:'1'}, "slow");
+							$("#cmnd_dtls_modal #alerto").animate({height: '100%',opacity:'1'}, "slow");
+	               		}else{
+	               			$('#cmnd_dtls_modal #alerto').html(result.message);
+							$('#cmnd_dtls_modal #alerto').css("display", "block");
+							$('#cmnd_dtls_modal #alerto').css("opacity", "0");
+							$('#cmnd_dtls_modal #alerto').addClass("alert-danger");
+							$('#cmnd_dtls_modal #alerto').addClass("alert-success");
+							$("#cmnd_dtls_modal #alerto").animate({width: '100%',opacity:'1'}, "slow");
+							$("#cmnd_dtls_modal #alerto").animate({height: '100%',opacity:'1'}, "slow");
+	               		}
+	               	},
+	               	error: function(result) {console.log(result)}
+	               });
+           });
+      	});
+
+
+	
+	
+
+
+}
+
 function add_records(locationsArray,nbr_cmnd){
 								var summ = 0;
 								for (var i = locationsArray.length - 1; i >= 0; i--) {
-                    			var row = cmnd_dtls_table.insertRow(0);
+                    			var row = cmnd_dtls_table.insertRow(1);
 								var atrb1 = row.insertCell(0);
 								var atrb2 = row.insertCell(1);
 								var atrb3 = row.insertCell(2);
@@ -136,6 +234,7 @@ function add_records(locationsArray,nbr_cmnd){
 								cmnd_dtls_modal.style.display='block';
 								$("#cmnd_dtls_modal #cmnd_dtls_table").addClass('table table-striped ')
 								$('.products-table').css('max-height','23rem')
+
 }
 // Get the modal
 var modal = document.getElementById('myModal');
@@ -186,7 +285,7 @@ function cancel()
 	$('#Fournisseur').css('display','none');
 	$('#Produit').css('display','none');
 	//detaile form
-	$("#cmnd_dtls_modal #cmnd_dtls_table tr").remove();
+	$("#cmnd_dtls_modal #cmnd_dtls_table tr:gt(0)").remove();
 	$('#cmnd_dtls_modal #cmnd_dtls_nbr').html("Detaile du commande N°: ");
 	$('#cmnd_dtls_modal #cmnd_dtls_client').html("CLIENT : ");
 	$('#cmnd_dtls_modal #cmnd_dtls_date').html("DATE : ");
@@ -677,9 +776,6 @@ function update_Produit(code_produit)
 }
 
 
-function hide_table(){$(document).ready(function() { $("#statistics #taable").hide() });}
-function show_table(){$(document).ready(function() { $("#statistics #taable").show() });}
-function empty_table(){$(document).ready(function() { $("#statistics #taable tr:gt(0)").remove() });}
 
 
 	// SELECT ITEMS SELECTED ITEM CHANGED ------------------------------------
@@ -751,7 +847,7 @@ function commandes_table(annee,etat)
 function fill_filterd_commandes(filterd_commandes){
 			 
 			$("#filtre_commandes tr:gt(0)").remove()
-			var filtred_commandes_table = document.getElementById('filtre_commandes')
+			var filtred_commandes_table = document.getElementById('filtre_commandes')  
 
 			
 			for (var i = filterd_commandes['commandes'].length - 1; i >= 0; i--) {
@@ -779,118 +875,214 @@ $(document).ready(function() {$(function() {$.ajax({url: '/statistics/'+top10yea
 
 function fill_staistics_table(statistics){
 			 
-			$("#statistics_table tr").remove()
-			var statistics_table = document.getElementById('statistics_table')
+	$("#statistics_table tr").remove()
+	var statistics_table = document.getElementById('statistics_table')  
+	var charts = {};
+	charts.libbels=[];
+	charts.numbers=[];
+	var row ;var atrb0 ;var atrb1 ;var atrb2 ;var atrb3 ;var atrb4 ;
+	var total = 0;
+	
+	if (statistics['statistics_OF'] == 'CATEGORIE') {
+				row =  statistics_table.insertRow(0);
+				atrb0 = row.insertCell(0);
+				atrb1 = row.insertCell(1);
+				 atrb1.innerHTML = "LIBELLE"
+				 atrb1.style.color = 'white'
+				 atrb0.style.background ='white'
+				row.style.backgroundColor='black'
+				 atrb0.style.border='0px'
+				 for (var i = 0  ; i <statistics['statistics'].length; i++) {
+				 	total+=Number(statistics['statistics'][i].nbr_qte)
+				 }
+				 console.log(total)
+					for (var i = 0  ; i <statistics['statistics'].length; i++) {
+					var row =  statistics_table.insertRow(-1);
+					atrb0 = row.insertCell(0);
+					atrb1 = row.insertCell(1);
+					 atrb0.innerHTML = i+1
+					 atrb0.style.backgroundColor = 'BLACK'
+					 atrb0.style.color = 'white'
+					 atrb1.innerHTML = statistics['statistics'][i].libelle
+					 console.log(((statistics['statistics'][i].nbr_qte*100)/total).toFixed(2))
+					 charts.libbels.push(statistics['statistics'][i].libelle + "  ("+((statistics['statistics'][i].nbr_qte*100)/total).toFixed(2)+"%)" )
+					 charts.numbers.push(statistics['statistics'][i].nbr_qte)
+					}
+	}else if(statistics['statistics_OF'] == 'FOURNISSEURS'){
+				row =  statistics_table.insertRow(0);
+				atrb0 = row.insertCell(0);
+				atrb1 = row.insertCell(1);
+				 atrb1.innerHTML = "NAME"
+				 atrb1.style.color = 'white'
+				 atrb0.style.background ='white'
+				row.style.backgroundColor='black'	
+				atrb0.style.border='0px'
+				 for (var i = 0  ; i <statistics['statistics'].length; i++) {
+				 	total+=Number(statistics['statistics'][i].qty_total)
+				 }				
+					for (var i = 0  ; i <statistics['statistics'].length; i++) {
+					var row =  statistics_table.insertRow(-1);
+					atrb0 = row.insertCell(0);
+					atrb1 = row.insertCell(1);
+					 atrb0.innerHTML = i+1
+					 atrb0.style.backgroundColor = 'BLACK'
+					 atrb0.style.color = 'white'					 	
+					 atrb1.innerHTML = statistics['statistics'][i].name
+					 charts.libbels.push(  statistics['statistics'][i].name+"  ("+((statistics['statistics'][i].qty_total*100)/total).toFixed(2)+"%)  ")
+					 charts.numbers.push(statistics['statistics'][i].qty_total)
+					}
+	}else if(statistics['statistics_OF'] == 'CLIENTS'){
+				row =  statistics_table.insertRow(0);
+				atrb0 = row.insertCell(0);
+				atrb1 = row.insertCell(1);
+				atrb2 = row.insertCell(2);
+				atrb3 = row.insertCell(3);
+				 atrb1.innerHTML = "NAME"
+				atrb2.innerHTML = "EMAIL"
+				atrb3.innerHTML = "QUANTITE COMMANDER"
+				atrb1.style.color = 'white'
+				atrb2.style.color = 'white'
+				atrb3.style.color = 'white'
+				atrb0.style.background ='white'
+				atrb0.style.border='0px'
+				row.style.backgroundColor='black'		
+				 for (var i = 0  ; i <statistics['statistics'].length; i++) {
+				 	total+=Number(statistics['statistics'][i].nbr_qty)
+				 }							
+					for (var i = 0  ; i <statistics['statistics'].length; i++) {
+					var row =  statistics_table.insertRow(-1);
+					atrb0 = row.insertCell(0);
+					atrb1 = row.insertCell(1);
+					atrb2 = row.insertCell(2);
+					atrb3 = row.insertCell(3);							
+					 atrb0.innerHTML = i+1
+					 atrb0.style.backgroundColor = 'BLACK'
+					 atrb0.style.color = 'white'
+					 atrb1.innerHTML = statistics['statistics'][i].name
+					 atrb2.innerHTML = statistics['statistics'][i].email
+					 atrb3.innerHTML = statistics['statistics'][i].nbr_qty
+					 charts.libbels.push(statistics['statistics'][i].name + "  ("+((statistics['statistics'][i].nbr_qty*100)/total).toFixed(2)+"%)")
+					 charts.numbers.push(statistics['statistics'][i].nbr_qty)
+					}
+	}else if(statistics['statistics_OF'] == 'PRODUITS'){
+				row =  statistics_table.insertRow(0);
+				atrb0 = row.insertCell(0);
+				atrb1 = row.insertCell(1);
+				atrb2 = row.insertCell(2);
+				atrb3 = row.insertCell(3);
+				 atrb1.innerHTML = "REFFERENCE"
+				atrb2.innerHTML = "DESIGNATION"
+				atrb3.innerHTML = "SELLED QUANTITY"
+				atrb1.style.color = 'white'
+				atrb2.style.color = 'white'
+				atrb3.style.color = 'white'
+				atrb0.style.background ='white'
+				row.style.backgroundColor='black'
+				atrb0.style.border='0px'
+				 for (var i = 0  ; i <statistics['statistics'].length; i++) {
+				 	total+=Number(statistics['statistics'][i].qty_total)
+				 }	
+					for (var i = 0  ; i <statistics['statistics'].length; i++) {
+					var row =  statistics_table.insertRow(-1);
+					atrb0 = row.insertCell(0);
+					atrb1 = row.insertCell(1);
+					atrb2 = row.insertCell(2);
+					atrb3 = row.insertCell(3);
+					 atrb0.innerHTML = i+1
+					 atrb0.style.backgroundColor = 'BLACK'
+					 atrb0.style.color = 'white'					 	
+					 atrb1.innerHTML = statistics['statistics'][i].REFERENCE
+					 atrb2.innerHTML = statistics['statistics'][i].designation
+					 atrb3.innerHTML = statistics['statistics'][i].qty_total
+					 charts.libbels.push(statistics['statistics'][i].designation+ "  ("+((statistics['statistics'][i].qty_total*100)/total).toFixed(2)+"%)")
+					 charts.numbers.push(statistics['statistics'][i].qty_total)
+					}
+	}
+	$("#statistics_table ").addClass('table table-striped')
+	console.log(charts)
+	update_chart(charts)
 
-			var row ;var atrb0 ;var atrb1 ;var atrb2 ;var atrb3 ;var atrb4 ;
-			
-			
-			if (statistics['statistics_OF'] == 'CATEGORIE') {
-						row =  statistics_table.insertRow(0);
-						atrb0 = row.insertCell(0);
-						atrb1 = row.insertCell(1);
-					 	atrb1.innerHTML = "LIBELLE"
-					 	atrb1.style.color = 'white'
-					 	atrb0.style.background ='white'
-						row.style.backgroundColor='black'
-				       /* atrb0.style.border-top-color='white'*/
-                         atrb0.style.border='0px'
-							for (var i = 0  ; i <statistics['statistics'].length; i++) {
-	        				var row =  statistics_table.insertRow(-1);
-							atrb0 = row.insertCell(0);
-							atrb1 = row.insertCell(1);
-						 	atrb0.innerHTML = i+1
-						 	atrb0.style.backgroundColor = 'BLACK'
-						 	atrb0.style.color = 'white'
-						 	atrb1.innerHTML = statistics['statistics'][i].libelle
-	        				}
-			}else if(statistics['statistics_OF'] == 'FOURNISSEURS'){
-						row =  statistics_table.insertRow(0);
-						atrb0 = row.insertCell(0);
-						atrb1 = row.insertCell(1);
-					 	atrb1.innerHTML = "NOM"
-					 	atrb1.style.color = 'white'
-					 	atrb0.style.background ='white'
-						row.style.backgroundColor='black'	
-						atrb0.style.border='0px'
-							for (var i = 0  ; i <statistics['statistics'].length; i++) {
-	        				var row =  statistics_table.insertRow(-1);
-							atrb0 = row.insertCell(0);
-							atrb1 = row.insertCell(1);
-						 	atrb0.innerHTML = i+1
-						 	atrb0.style.backgroundColor = 'BLACK'
-						 	atrb0.style.color = 'white'					 	
-						 	atrb1.innerHTML = statistics['statistics'][i].name
-	        				}
-			}else if(statistics['statistics_OF'] == 'CLIENTS'){
-						row =  statistics_table.insertRow(0);
-						atrb0 = row.insertCell(0);
-						atrb1 = row.insertCell(1);
-						atrb2 = row.insertCell(2);
-						atrb3 = row.insertCell(3);
-					 	atrb1.innerHTML = "NOM"
-						atrb2.innerHTML = "EMAIL"
-						atrb3.innerHTML = "QUANTITE COMMANDER"
-						atrb1.style.color = 'white'
-						atrb2.style.color = 'white'
-						atrb3.style.color = 'white'
-						atrb0.style.background ='white'
-						atrb0.style.border='0px'
-
-						row.style.backgroundColor='black'				
-							for (var i = 0  ; i <statistics['statistics'].length; i++) {
-	        				var row =  statistics_table.insertRow(-1);
-							atrb0 = row.insertCell(0);
-							atrb1 = row.insertCell(1);
-							atrb2 = row.insertCell(2);
-							atrb3 = row.insertCell(3);							
-						 	atrb0.innerHTML = i+1
-						 	atrb0.style.backgroundColor = 'BLACK'
-						 	atrb0.style.color = 'white'
-						 	atrb1.innerHTML = statistics['statistics'][i].name
-						 	atrb2.innerHTML = statistics['statistics'][i].email
-						 	atrb3.innerHTML = statistics['statistics'][i].nbr_qty
-	        				}
-			}else if(statistics['statistics_OF'] == 'PRODUITS'){
-						row =  statistics_table.insertRow(0);
-						atrb0 = row.insertCell(0);
-						atrb1 = row.insertCell(1);
-						atrb2 = row.insertCell(2);
-						atrb3 = row.insertCell(3);
-					 	atrb1.innerHTML = "REFERENCE"
-						atrb2.innerHTML = "DESIGNATION"
-						atrb3.innerHTML = "QUANTITÉ VENDUE"
-						atrb1.style.color = 'white'
-						atrb2.style.color = 'white'
-						atrb3.style.color = 'white'
-						atrb0.style.background ='white'
-						row.style.backgroundColor='black'
-						atrb0.style.border='0px'	
-							for (var i = 0  ; i <statistics['statistics'].length; i++) {
-	        				var row =  statistics_table.insertRow(-1);
-							atrb0 = row.insertCell(0);
-							atrb1 = row.insertCell(1);
-							atrb2 = row.insertCell(2);
-							atrb3 = row.insertCell(3);
-						 	atrb0.innerHTML = i+1
-						 	atrb0.style.backgroundColor = 'BLACK'
-						 	atrb0.style.color = 'white'					 	
-						 	atrb1.innerHTML = statistics['statistics'][i].REFERENCE
-						 	atrb2.innerHTML = statistics['statistics'][i].designation
-						 	atrb3.innerHTML = statistics['statistics'][i].qty_total
-	        				}
-			}
-			$("#statistics_table ").addClass('table table-striped')
-			console.log($("#statistics_table thead tr").val())
-
-/*			for (var i = filterd_commandes['commandes'].length - 1; i >= 0; i--) {
-
-
-			}*/
 }
 
 
 
 
 
+var colorArray = ['#FF6633', '#FFB399','#4D80CC', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF','#FF33FF', '#FFFF99', '#00B3E6', 
+			'#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+			'#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+			'#FF99E6', '#CCFF1A', '#1AFF33', '#999933',, '#FF1A66', '#E6331A', '#33FFCC',
+			'#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+			'#66664D', '#991AFF', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#E666FF', '#4DB3FF', '#1AB399',
+			'#E666B3', '#9900B3', '#E6FF80', '#809980', '#4D8066','#FF3380', '#CCCC00', '#66E64D' 
+			
+			
+			];
 
+
+var ctx = document.getElementById("mycharts").getContext('2d');
+var myChart = new Chart(ctx, {
+type: 'doughnut',
+data: {
+datasets: [{
+	backgroundColor: generate_colors(),
+	borderColor: "rgba(250,250,250,1)",
+
+	borderWidth: 1
+}]
+},
+options: {
+
+
+title: {
+	display: false,
+},
+legend: {
+	display:true,
+	position:'left'
+},
+
+}
+});
+
+function update_chart(chart_data){
+var ln = myChart.data.labels.length
+for (var i = 0; i < ln; i++) {  		
+myChart.data.labels.pop();
+myChart.data.datasets.forEach((dataset) => {dataset.data.pop(); });
+}
+
+
+
+
+for (var i = 0; i < chart_data['numbers'].length; i++) {
+myChart.data.labels.push(chart_data['libbels'][i]);
+myChart.data.datasets.forEach((dataset) =>	{dataset.data.push(chart_data['numbers'][i])});
+
+}
+console.log(ln)
+
+myChart.update()
+
+}
+
+
+function generate_colors()
+{
+	myColors = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+	var generated_colors = [];
+	cutIn= 0;
+	for (var i = 0; i < 100; i++) {
+	
+		var myRandone = myColors[Math.floor(Math.random() * myColors.length)];
+		var myRandtwo = myColors[Math.floor(Math.random() * myColors.length)];
+		var myRandthree = myColors[Math.floor(Math.random() * myColors.length)];
+		var myRandfour = myColors[Math.floor(Math.random() * myColors.length)];
+		var myRandfive = myColors[Math.floor(Math.random() * myColors.length)];
+		var myRandsix = myColors[Math.floor(Math.random() * myColors.length)];
+		var sixDigitRandom =  myRandone + myRandtwo + myRandthree + myRandfour + myRandfive + myRandsix;
+			generated_colors.push("#"+sixDigitRandom)}
+
+
+			return generated_colors;
+}

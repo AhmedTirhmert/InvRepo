@@ -11,6 +11,7 @@ var span = document.getElementsByClassName("close2")[0];
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
     modal.style.display="block";
+    $("#cmnd").show();
 }
 
 /*btn_cls.onclick = function() {
@@ -101,7 +102,7 @@ btn_ajouter.onclick = function(){
 
 }else{
 	
-	alert_fill.style.display="block";$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');
+	alert_fill.style.display="block";$("#alert_fill").removeClass('alert-success');$("#alert_fill").addClass('alert-danger');alert_fill.innerHTML="Entrer une quantité valide :!";
 	qty.value="";
 	qty.class="has_error";
 	/*qty.focus();*/
@@ -124,17 +125,30 @@ function deleteRow(btn) {
 }
 function cmnd_det(id)
 { 
-
+$('#modal-alert').css('display','none');
 $(document).ready(function() {
             $(function() {
                 $.ajax({
                     url: '/cmnd_dtl/'+id,
                     type: 'get',
                     success: function (data) {
-                        var locationsArray = data;
+                    	console.log(data)
+                        var locationsArray = data['products'];
                         add_record(locationsArray,id);
-						
-                    }
+                        if (data['infos'][0].id_etat == 2) 
+                    	{
+                    		$('#modal-alert').html("<b>"+data['infos'][0].name+ "</b> : " + data['infos'][0].Message);
+                    		$('#modal-alert').removeClass('alert-success');
+                    		$('#modal-alert').addClass('alert-warning');
+                    		$('#modal-alert').css('display','block');
+                    	}else{
+                    		$('#modal-alert').html("Cette commande été approuvé par : <b>"+data['infos'][0].name + "</b>");
+        		     		$('#modal-alert').addClass('alert-success');
+                    		$('#modal-alert').removeClass('alert-warning');
+                    		$('#modal-alert').css('display','block');
+                    	}
+                    },
+                    error:function(data){console.log(data)}
                 });
             });
         });
@@ -162,6 +176,7 @@ function add_record(locationsArray,id){
 								}
 								
 								cmnd_dtls_total.value=summ.toFixed(2);
+
 								cmnd_dtls_modal.style.display='block';
 }
 
@@ -195,11 +210,13 @@ $(document).ready(function () {
             	$("#alert_fill").removeClass('alert-danger');
             	$("#alert_fill").addClass('alert-success');
             	$("#alert_fill").css('display','block');
+            	$("cmnd_prix_total").val('');
+            	$("#btn-close").html('Fermer');
             	$("#new_cmnd_products_table tr:gt(0)").remove();
-
+            	$("#cmnd").hide();
             },
             error: function(result) {
-            	/*console.log(result); */
+            	console.log(result); 
             }
         });
     });
